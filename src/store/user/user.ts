@@ -1,17 +1,6 @@
-// src/stores/user.ts
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import http from '@/http'
-import { isMockEnabled, mockResponse } from '@/mock'
-import { mockNavData } from '@/mock/user'
-
-export interface UserInfo {
-  id: number
-  username: string
-  name: string
-  roles: string[]
-  permissions: string[]
-}
+import type { UserInfo } from '@/types'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref<string>(localStorage.getItem('token') || '')
@@ -38,17 +27,30 @@ export const useUserStore = defineStore('user', () => {
     return !!token.value
   })
 
-  // 你可以根据实际的接口来获取用户信息或导航菜单
-  const fetchNav = async (): Promise<void> => {
-    try {
-      // 开发环境 mock：返回 mockNavData；否则走真实接口
-      const result = isMockEnabled()
-        ? await mockResponse(mockNavData)
-        : await http.get('/api/functions')
-      console.log('导航/功能数据:', result.data)
-    } catch (error) {
-      console.error('获取导航/功能数据失败:', error)
-    }
+  const ADMIN_ROLE = 'sys:admin'
+
+  const isAdmin = computed(() => {
+    const roles = userInfo.value?.roles || []
+    return roles.includes(ADMIN_ROLE)
+  })
+
+  const hasPermission = (code: string): boolean => {
+    if (isAdmin.value) return true
+    const permissions = userInfo.value?.permissions || []
+    return permissions.includes(code)
+  }
+
+  const hasAnyPermission = (codes: string[]): boolean => {
+    if (!codes || codes.length === 0) return true
+    if (isAdmin.value) return true
+    const permissions = userInfo.value?.permissions || []
+    return codes.some((code) => permissions.includes(code))
+  }
+
+  const hasRole = (role: string): boolean => {
+    if (isAdmin.value) return true
+    const roles = userInfo.value?.roles || []
+    return roles.includes(role)
   }
 
   return {
@@ -58,6 +60,9 @@ export const useUserStore = defineStore('user', () => {
     setUserInfo,
     logout,
     isAuthenticated,
-    fetchNav
+    isAdmin,
+    hasPermission,
+    hasAnyPermission,
+    hasRole,
   }
 })

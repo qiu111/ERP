@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
-import type { NavItem } from '@/mock/user'
+import type { NavItem } from '@/types'
 
 // 菜单 store：持有侧边栏渲染所需的唯一数据源
+// 数据由 loadDynamicRoutes 统一写入（从后端/API 获取），确保菜单与路由同源
 const useMenuStore = defineStore('menu', {
   state: () => ({
     collapse: false,
-    /** 侧边栏渲染用的菜单树，开发环境取值 mockNavData */
+    /** 侧边栏渲染用的菜单树，由 loadDynamicRoutes 填充 */
     menuList: [] as NavItem[],
   }),
   getters: {

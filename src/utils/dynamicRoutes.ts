@@ -1,5 +1,6 @@
 // utils/dynamicRoutes.ts
-import type { RouteRecordRaw } from 'vue-router'
+
+import type { NavItem } from '@/types'
 
 // 定义后端返回的数据类型
 export interface BackendFunction {
@@ -26,21 +27,76 @@ export interface BackendFunction {
 }
 
 // 转换后的路由类型
-export interface DynamicRoute extends RouteRecordRaw {
+export interface DynamicRoute {
+  path: string
+  name?: string | number | symbol
+  component?: any
+  redirect?: string
+  meta?: Record<string, any>
   children?: DynamicRoute[]
 }
 
 /**
- * 将后端功能数据转换为Vue Router路由
+ * 将后端功能数据转换为侧边栏渲染用的 NavItem 树形结构
+ * 递归构建，仅包含有 URL 的菜单节点（根节点和叶子节点都需有 url）
+ *
  * @param functions 后端返回的功能数据数组
- * @returns 转换后的路由数组
+ * @returns 转换后的 NavItem 树形数组
+ */
+export function backendToNavItems(functions: BackendFunction[]): NavItem[] {
+  const map = new Map<string, BackendFunction[]>()
+  const roots: BackendFunction[] = []
+
+  for (const func of functions) {
+    if (func.pid === '0' || func.pid === '') {
+      roots.push(func)
+    } else {
+      if (!map.has(func.pid)) map.set(func.pid, [])
+      map.get(func.pid)!.push(func)
+    }
+  }
+
+  const toNavItem = (func: BackendFunction): NavItem => {
+    const children = map.get(func.id)
+    const hasChildren = children && children.length > 0
+    const item: NavItem = {
+      title: func.text || func.function_name,
+      path: func.url || `/${func.function_code || func.id}`,
+      icon: func.function_icon || func.iconCls || undefined,
+      ...(hasChildren ? { children: children!.map(toNavItem) } : {}),
+    }
+    return item
+  }
+
+  return roots.map(toNavItem)
+}
+
+/**
+ * 根据功能code动态加载组件
+ */
+function loadComponentByFunctionCode(functionCode: string) {
+  const componentMap: Record<string, () => Promise<any>> = {
+    'my_center': () => import('@/views/dashboard/Index.vue'),
+    'userList': () => import('@/views/system/User/UserList.vue'),
+    'roleList': () => import('@/views/system/Role/RoleList.vue'),
+    'functionList': () => import('@/views/system/Function/FunctionList.vue'),
+    'system': () => import('@/views/404.vue'),
+    'goodsRoot': () => import('@/views/404.vue'),
+    'oa': () => import('@/views/404.vue'),
+  }
+  return componentMap[functionCode] || (() => import('@/views/404.vue'))
+}
+
+/**
+ * 将后端功能数据转换为Vue Router路由（仅叶子节点路由）
+ *
+ * @param functions 后端返回的功能数据数组
+ * @returns 转换后的叶子节点路由数组
  */
 export function transformFunctionsToRoutes(functions: BackendFunction[]): DynamicRoute[] {
-  // 按pid分组，用于构建层级关系
   const functionMap = new Map<string, BackendFunction[]>()
   const rootFunctions: BackendFunction[] = []
 
-  // 分类功能数据
   functions.forEach(func => {
     if (func.pid === '0' || func.pid === '') {
       rootFunctions.push(func)
@@ -52,92 +108,53 @@ export function transformFunctionsToRoutes(functions: BackendFunction[]): Dynami
     }
   })
 
-  // 递归构建路由
-  const buildRoutes = (parentFunctions: BackendFunction[]): DynamicRoute[] => {
-    return parentFunctions.map(func => {
-      const route: DynamicRoute = {
-        path: func.url || `/${func.function_code || func.id}`,
-        name: func.function_code || func.id,
-        meta: {
-          title: func.text || func.function_name,
-          icon: func.function_icon || func.iconCls,
-          roles: [`${func.group_code}:${func.function_code || func.function_name}`],
-          // 可以添加更多元信息
-          functionId: func.function_id,
-          functionCode: func.function_code,
-          functionName: func.function_name,
-          groupId: func.group_code
-        }
-      }
+  const leafRoutes: DynamicRoute[] = []
 
-      // 处理有子功能的情况
-      if (functionMap.has(func.id) && functionMap.get(func.id)!.length > 0) {
-        route.children = buildRoutes(functionMap.get(func.id)!)
-        
-        // 如果当前路由有子路由，但自己没有指定路径，则设置为布局路由
-        if (!route.path || route.path === '/' || !route.path.startsWith('/')) {
-          route.path = ''
-          route.component = () => import('@/layout/Index.vue')
-        }
+  const collectLeafRoutes = (items: BackendFunction[]) => {
+    items.forEach(func => {
+      const hasChildren = functionMap.has(func.id) && functionMap.get(func.id)!.length > 0
+
+      if (hasChildren) {
+        collectLeafRoutes(functionMap.get(func.id)!)
       } else {
-        // 叶子节点路由 - 设置组件
-        if (route.path && !route.component) {
-          // 这里需要根据你的实际组件路径来动态导入
-          // 你可以创建一个映射或者根据function_code来决定导入哪个组件
+        const route: DynamicRoute = {
+          path: func.url || `/${func.function_code || func.id}`,
+          name: func.function_code || func.id,
+          meta: {
+            title: func.text || func.function_name,
+            icon: func.function_icon || func.iconCls,
+            // 以 function_code 作为页面访问权限编码（如 'roleList'）
+            // 路由守卫会校验用户 permissions 是否包含该编码，超级管理员绕过
+            roles: [func.function_code].filter(Boolean),
+            functionId: func.function_id,
+            functionCode: func.function_code,
+            functionName: func.function_name,
+            groupId: func.group_code,
+          },
+        }
+
+        if (func.function_code) {
           route.component = loadComponentByFunctionCode(func.function_code)
         }
-      }
 
-      return route
+        leafRoutes.push(route)
+      }
     })
   }
 
-  // 根据功能code动态加载组件的示例函数（需要根据实际情况调整）
-  const loadComponentByFunctionCode = (functionCode: string) => {
-    // 这里是一个示例映射，你需要根据实际的组件路径来配置
-    const componentMap: Record<string, string> = {
-      'my_center': '@/views/dashboard/Index.vue',
-      'userList': '@/views/system/User/UserList.vue',
-      'roleList': '@/views/system/Role/RoleList.vue',
-      // 添加更多的映射...
-    }
-
-    const componentPath = componentMap[functionCode] || '@/views/404.vue'
-    return () => import(/* @vite-ignore */ componentPath)
-  }
-
-  // 构建路由，确保根路由有Layout组件
-  const allRoutes = buildRoutes(rootFunctions)
-
-  // 处理根路由，确保有Layout包裹
-  return allRoutes.map(route => {
-    // 如果是顶级路由且没有指定组件，使用Layout
-    if (!route.component) {
-      return {
-        path: '/',
-        component: () => import('@/layout/Index.vue'),
-        redirect: allRoutes.find(r => r.path === '/dashboard')?.path || '/dashboard',
-        children: [route]
-      }
-    }
-    
-    return route
-  })
+  collectLeafRoutes(rootFunctions)
+  return leafRoutes
 }
 
 /**
  * 动态添加路由到路由器
+ * 所有动态路由挂载到 'main' (Layout 父路由) 下，与静态路由共用同一个 Layout 实例
+ *
  * @param router Vue Router实例
- * @param dynamicRoutes 动态路由数组
+ * @param dynamicRoutes 动态路由数组（叶子节点，绝对路径如 /system/user）
  */
 export function addDynamicRoutes(router: any, dynamicRoutes: DynamicRoute[]) {
-  // 清空或备份现有路由（如果需要）
-  
-  // 添加动态路由
   dynamicRoutes.forEach(route => {
-    router.addRoute(route)
+    router.addRoute('layout-root', route)
   })
-  
-  // 或者添加到一个动态路由名称下
-  // router.addRoute('dynamic', ...dynamicRoutes)
 }

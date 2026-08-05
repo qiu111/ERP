@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NavItem } from '@/mock/user'
+import type { NavItem } from '@/types'
 
 defineProps<{
   menuList: NavItem[]

@@ -12,15 +12,14 @@
   </el-menu>
 </template>
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import MenuItemVue from './MenuItem.vue'
 import MenuLogo from './menuLogo.vue'
 import { useRoute, useRouter } from 'vue-router'
 import useMenuStore from '@/store/menu'
+import type { NavItem } from '@/types'
 
 const router = useRouter()
-import { mockNavData, type NavItem } from '@/mock/user'
-
 const menuStore = useMenuStore()
 const route = useRoute()
 
@@ -34,7 +33,6 @@ const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
 const handleSelect = (index: string) => {
-  // 仅在叶子菜单（el-menu-item）时跳转，子菜单（el-sub-menu）点击仅展开/收起
   router.push(index)
 }
 
@@ -43,28 +41,14 @@ const defaultActive = computed(() => {
   return route.path
 })
 
-// 菜单列表：优先读取 store，开发环境下首次挂载时填充 mock 数据
+// 菜单列表：从 menuStore 读取，数据由 loadDynamicRoutes 统一写入
+// 开发首次加载前若 store 为空，使用空数组占位，等待路由守卫触发加载
 const menuList = computed<NavItem[]>(() => {
-  return menuStore.getMenuList?.length
-    ? menuStore.getMenuList
-    : buildDefaultMenu()
-})
-
-// 构造默认菜单：直接使用 mockNavData，个人门户指向 /dashboard
-function buildDefaultMenu(): NavItem[] {
-  return [...mockNavData]
-}
-
-// 组件挂载时写入 store，便于其他组件复用
-onMounted(() => {
-  if (!menuStore.getMenuList?.length) {
-    menuStore.setMenuList(buildDefaultMenu())
-  }
+  return menuStore.getMenuList
 })
 </script>
 <style scoped lang="scss">
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-  // width: 200px;
   min-height: 400px;
 }
 

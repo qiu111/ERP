@@ -13,9 +13,6 @@ import useMenuStore from '@/store/menu'
 const router = useRouter()
 
 const menuStore = useMenuStore()
-// const showTitle = computed(() => {
-//     return menuStore.getCollapse
-// })
 
 const showTitle = ref(true)
 watch(

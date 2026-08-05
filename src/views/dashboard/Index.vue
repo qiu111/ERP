@@ -211,13 +211,9 @@ import {
   TrendCharts,
   EditPen,
   List,
-  Fold,
-  CircleCheck,
   Warning,
-  Finished,
   View,
   Calendar,
-  Opportunity,
 } from '@element-plus/icons-vue'
 
 // 顶部统计卡片数据
@@ -306,7 +302,7 @@ const todoItems = reactive([
     typeColor: '#409eff',
   },
   {
-    startDate: '2021-01-04',
+    startDate: '2026-01-04',
     name: '付款申请流水列表导出',
     status: '未开展',
     statusType: 'info' as const,

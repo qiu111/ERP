@@ -3,7 +3,6 @@
   <div class="login-container">
     <div class="login-box">
       <div class="login-header">
-        <!-- <h3>demo</h3> -->
         <h2>ERP综合管理平台</h2>
       </div>
       

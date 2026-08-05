@@ -31,12 +31,7 @@ export const useTabsStore = defineStore('tabStore', {
         }
     },
     persist: {
-        enabled: true, // 开启持久化
-        strategies: [
-            {
-                storage: localStorage,
-                paths: ['tabList']
-            }
-        ]
+        storage: localStorage,
+        pick: ['tabList']
     }
 })  

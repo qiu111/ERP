@@ -1,0 +1,84 @@
+/* 全局样式：字体设置 */
+:root {
+  --font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
+  --font-size-base: 14px;
+  --font-size-title: 16px;
+}
+
+/* 全局字体设置 */
+html,
+body,
+#app {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: #303133;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 标题字体大小 */
+h1, h2, h3, h4, h5, h6,
+.page-title,
+.el-dialog__title,
+.el-card__header {
+  font-size: var(--font-size-title);
+}
+
+/* Element Plus 组件字体覆盖 */
+.el-table {
+  font-size: var(--font-size-base);
+}
+
+.el-form-item__label {
+  font-size: var(--font-size-base);
+}
+
+.el-button {
+  font-size: var(--font-size-base);
+}
+
+.el-input__inner {
+  font-size: var(--font-size-base);
+}
+
+.el-select .el-input__inner {
+  font-size: var(--font-size-base);
+}
+
+.el-pagination {
+  font-size: var(--font-size-base);
+}
+
+.el-menu {
+  font-size: var(--font-size-base);
+}
+
+.el-breadcrumb__inner,
+.el-breadcrumb__separator {
+  font-size: var(--font-size-base);
+}
+
+.el-tabs__item {
+  font-size: var(--font-size-base);
+}
+
+.el-dialog__body {
+  font-size: var(--font-size-base);
+}
+
+/* 状态标签公共样式 */
+.status-tag {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-active,
+.status-enabled,
+.status-normal {
+  color: #67c23a;
+}
+
+.status-inactive,
+.status-disabled {
+  color: #f56c6c;
+}

@@ -19,7 +19,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
-import {useTabsStore, Tab} from '@/store/tabs/index.ts';
+import { useTabsStore } from '@/store/tabs/index.ts';
+import type { Tab } from '@/store/tabs/index.ts';
 import { useRoute, useRouter } from 'vue-router';
 import type { TabsPaneContext } from 'element-plus';
 
@@ -36,9 +37,7 @@ const activeTab = ref(route.path);
 
 // 选项卡点击事件
 const clickTab = (pane: TabsPaneContext) => {
-    // console.log(pane);
     const {props} = pane;
-    // 跳转路由
     router.push({path: props.name as string});
 }
 // 选项卡删除事件
@@ -67,31 +66,23 @@ const removeTab = (targetName: string) => {
 // 添加选项卡
 const addTab = () => {
     const {path, meta} = route;
-    // console.log(path, meta);
     const tab:Tab = {
         path,
         title: meta.title as string,
     }
     store.addTab(tab);
-    activeTab.value = path; // 选中当前选项卡
+    activeTab.value = path;
 }
 
 //监听当前路由
 watch(
     () => route.path,
     () => {
-        //添加选项卡数据
         addTab();
-        // setActiveTab();
     }
 )
-// 设置激活的选项卡
-// const setActiveTab = () => {
-//     activeTab.value = route.path;
-// }
 onMounted(() => {
     addTab();
-    // setActiveTab();
 })
 
 </script>

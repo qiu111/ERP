@@ -21,7 +21,8 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import {useTabsStore, Tab} from '@/store/tabs/index.ts';
+import { useTabsStore } from '@/store/tabs/index.ts';
+import type { Tab } from '@/store/tabs/index.ts';
 const store = useTabsStore();
 const route = useRoute() // 获取当前路由
 const router = useRouter() // 获取路由实例

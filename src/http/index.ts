@@ -1,39 +1,20 @@
-// utils/http.ts
 import axios from "axios"
 import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from "axios"
 import { ElMessage } from "element-plus"
+import type { LoginResult, UserInfo } from "@/types"
 
-// 定义通用返回值类型
 export interface Result<T = any> {
   code: number
   message: string
   data: T
 }
 
-// 定义登录相关类型
 export interface LoginParams {
   username: string
   password: string
 }
 
-export interface LoginResult {
-  token: string
-  userInfo: {
-    id: number
-    username: string
-    name: string
-    roles: string[]
-    permissions: string[]
-  }
-}
-
-export interface UserInfo {
-  id: number
-  username: string
-  name: string
-  roles: string[]
-  permissions: string[]
-}
+export type { LoginResult, UserInfo }
 
 // axios配置项
 const config: AxiosRequestConfig = {

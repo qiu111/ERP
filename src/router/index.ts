@@ -1,6 +1,5 @@
 // router/index.ts
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import Layout from '@/layout/Index.vue'
 import { transformFunctionsToRoutes, addDynamicRoutes } from '@/utils/dynamicRoutes'
 import { useUserStore } from '@/store/user/user.ts'
 import { getMenu } from '@/api/user'
@@ -11,14 +10,24 @@ const staticRoutes: Array<RouteRecordRaw> = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login/Index.vue'),
-    meta: { 
+    meta: {
       title: '登录',
-      requiresAuth: false 
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/403',
+    name: 'Forbidden',
+    component: () => import('@/views/403.vue'),
+    meta: {
+      title: '无访问权限',
+      requiresAuth: false
     }
   },
   {
     path: '/',
-    component: Layout,
+    name: 'layout-root',
+    component: () => import('@/layout/Index.vue'),
     redirect: '/dashboard',
     children: [
       {
@@ -28,18 +37,12 @@ const staticRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: '个人门户',
           icon: 'House',
-          roles: ['sys:user'],
+          roles: ['my_center'],
           requiresAuth: true
         },
       }
     ]
   },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: () => import('@/views/404.vue'),
-    meta: { requiresAuth: false }
-  }
 ]
 
 const router = createRouter({
@@ -47,35 +50,71 @@ const router = createRouter({
   routes: staticRoutes
 })
 
-// 动态路由状态
+// 404 兜底路由
+const notFoundRoute: RouteRecordRaw = {
+  path: '/:pathMatch(.*)*',
+  name: 'NotFound',
+  component: () => import('@/views/404.vue'),
+  meta: { requiresAuth: false }
+}
+
+// 动态路由加载状态
 let dynamicRoutesLoaded = false
 
-// 动态加载路由 - 单独的方法，供外部调用
+// 递归获取所有路由路径（包括子路由）
+const getAllPaths = (routes: any[]): string[] => {
+  const paths: string[] = []
+  routes.forEach(route => {
+    paths.push(route.path)
+    if (route.children?.length) {
+      paths.push(...getAllPaths(route.children))
+    }
+  })
+  return paths
+}
+
+// 动态加载路由 - 登录成功后调用
 export async function loadDynamicRoutes() {
   if (dynamicRoutesLoaded) return
 
   try {
-    // getMenu() 返回 Result<BackendFunction[]>，result.data 即菜单数组
     const result = await getMenu()
     const functionsData = result.data
     const dynamicRoutes = transformFunctionsToRoutes(functionsData)
-    addDynamicRoutes(router, dynamicRoutes)
+
+    // 获取已有路由路径（递归），避免与静态路由子路由冲突
+    const existingPaths = new Set(getAllPaths(router.getRoutes()))
+    const filteredRoutes = dynamicRoutes.filter(
+      route => !existingPaths.has(route.path)
+    )
+
+    // 先标记，防止重入
     dynamicRoutesLoaded = true
-    console.log('动态路由加载成功')
+    // 将所有动态路由挂到 'layout-root' (Layout) 父路由下
+    addDynamicRoutes(router, filteredRoutes)
+    // 最后注册 404 兜底
+    router.addRoute(notFoundRoute)
+
+    // 同时将菜单数据写入 menuStore，供侧边栏动态渲染
+    const { backendToNavItems } = await import('@/utils/dynamicRoutes')
+    const { default: useMenuStore } = await import('@/store/menu')
+    const menuStore = useMenuStore()
+    menuStore.setMenuList(backendToNavItems(functionsData))
+
+    console.log('动态路由加载成功，共注册', filteredRoutes.length, '条路由')
   } catch (error) {
     console.error('动态路由加载失败:', error)
     dynamicRoutesLoaded = false
-    throw error // 抛出错误以便调用方处理
+    throw error
   }
 }
 
 // 路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const userStore = useUserStore()
-  
+
   // 不需要认证的路由
   if (to.meta.requiresAuth === false) {
-    // 如果已登录且访问登录页，重定向到个人门户
     if (to.path === '/login' && userStore.isAuthenticated) {
       next('/')
     } else {
@@ -83,12 +122,10 @@ router.beforeEach((to, from, next) => {
     }
     return
   }
-  
+
   // 需要认证的路由
   if (to.meta.requiresAuth === true) {
-    // 检查用户是否已登录
     if (!userStore.isAuthenticated) {
-      // 未登录，重定向到登录页，并记录当前路由以便登录后跳转
       next({
         path: '/login',
         query: { redirect: to.fullPath }
@@ -96,8 +133,29 @@ router.beforeEach((to, from, next) => {
       return
     }
   }
-  
-  // 正常导航
+
+  // 已认证但动态路由还未加载 → 加载后再导航
+  if (userStore.isAuthenticated && !dynamicRoutesLoaded) {
+    try {
+      await loadDynamicRoutes()
+      // 重新导航到目标路由
+      next({ ...to, replace: true })
+    } catch {
+      next(false)
+    }
+    return
+  }
+
+  // 权限校验：meta.roles 定义了访问该路由所需的权限编码
+  // 超级管理员（sys:admin）或拥有任一指定权限的用户允许访问，否则跳转 403
+  const requiredRoles = to.meta.roles as string[] | undefined
+  if (requiredRoles && requiredRoles.length > 0) {
+    if (!userStore.hasAnyPermission(requiredRoles)) {
+      next({ path: '/403', replace: true })
+      return
+    }
+  }
+
   next()
 })
 
