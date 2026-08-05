@@ -1,0 +1,79 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+dist
+dist-ssr
+build
+*.local
+
+# 环境变量与密钥（防止泄露）
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# 若仍不想提交任何 env 文件，可取消下面两行注释：
+# .env.development
+# .env.production
+
+# 缓存与临时文件
+.cache
+.temp
+.tmp
+*.tsbuildinfo
+.vite
+.turbo
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 操作系统生成文件
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# 包管理工具锁文件（按需保留 package-lock.json，按团队约定）
+# 如需忽略其他锁文件可取消注释
+# yarn.lock
+# pnpm-lock.yaml
+
+# 测试与覆盖率
+coverage
+*.lcov
+.nyc_output
+
+# 调试与日志目录
+.vscode/.history/
+
+# 安全相关（禁止提交）
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cert
+secrets/
+credentials.json
