@@ -48,21 +48,20 @@ export function buildFunctionTreeFromMenu(
   const map = new Map<string, FunctionItem>()
   const roots: FunctionItem[] = []
 
+  // 第一遍：扁平转换为节点（每个节点仅转换一次）
   menuList.forEach((bf) => {
     const item = backendToFunctionItem(bf)
     map.set(item.id, { ...item, children: [] })
   })
 
-  menuList.forEach((bf) => {
-    const item = backendToFunctionItem(bf)
-    const node = map.get(item.id)!
-    if (item.pid === '0' || item.pid === '') {
+  // 第二遍：根据 pid 组装父子关系
+  map.forEach((node) => {
+    if (node.pid === '0' || node.pid === '') {
       roots.push(node)
     } else {
-      const parent = map.get(item.pid)
+      const parent = map.get(node.pid)
       if (parent) {
-        parent.children = parent.children || []
-        parent.children.push(node)
+        parent.children!.push(node)
       } else {
         roots.push(node)
       }

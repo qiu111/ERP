@@ -9,11 +9,6 @@ export interface Result<T = any> {
   data: T
 }
 
-export interface LoginParams {
-  username: string
-  password: string
-}
-
 export type { LoginResult, UserInfo }
 
 // axios配置项

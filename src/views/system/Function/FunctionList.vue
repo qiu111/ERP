@@ -30,13 +30,14 @@
       </el-table-column>
       <el-table-column label="操作" width="300" align="center">
         <template #default="{ row }">
-          <el-button type="primary" link size="small" @click="handleAddChild(row)">
+          <el-button v-if="has('functionList:add')" type="primary" link size="small" @click="handleAddChild(row)">
             子模块
           </el-button>
-          <el-button type="primary" link size="small" @click="handleEdit(row)">
+          <el-button v-if="has('functionList:edit')" type="primary" link size="small" @click="handleEdit(row)">
             编辑
           </el-button>
           <el-button
+            v-if="has('functionList:toggle')"
             :type="row.status === 'normal' ? 'danger' : 'success'"
             link
             size="small"
@@ -44,7 +45,7 @@
           >
             {{ row.status === 'normal' ? '停用' : '启用' }}
           </el-button>
-          <el-button type="danger" link size="small" @click="handleDelete(row)">
+          <el-button v-if="has('functionList:delete')" type="danger" link size="small" @click="handleDelete(row)">
             删除
           </el-button>
         </template>
@@ -66,10 +67,12 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import SearchBar from '@/components/SearchBar.vue'
+import { usePermission } from '@/composables/usePermission'
 import { getFunctionTree, toggleFunctionStatus, deleteFunction } from '@/api/function'
 import type { FunctionItem } from '@/mock/function'
 import FunctionDialog from './FunctionDialog.vue'
 
+const { has } = usePermission()
 const loading = ref(false)
 const tableData = ref<FunctionItem[]>([])
 

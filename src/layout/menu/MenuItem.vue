@@ -6,8 +6,8 @@
             :index="menu.path"
         >
             <template #title>
-                <el-icon v-if="menu.icon" style="color: #666; font-size: 20px;">
-                    <component :is="menu.icon"></component>
+                <el-icon v-if="menu.icon && menuIcons[menu.icon]" style="color: #666; font-size: 20px;">
+                    <component :is="menuIcons[menu.icon]"></component>
                 </el-icon>
                 <span>{{ menu.title }}</span>
             </template>
@@ -16,8 +16,8 @@
         </el-sub-menu>
         <!-- 没有下级菜单 -->
         <el-menu-item v-else :index="menu.path">
-            <el-icon v-if="menu.icon">
-                <component :is="menu.icon"></component>
+            <el-icon v-if="menu.icon && menuIcons[menu.icon]">
+                <component :is="menuIcons[menu.icon]"></component>
             </el-icon>
             <template #title>{{ menu.title }}</template>
         </el-menu-item>
@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 import type { NavItem } from '@/types'
+import menuIcons from '@/utils/menuIcons'
 
 defineProps<{
   menuList: NavItem[]

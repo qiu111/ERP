@@ -2,19 +2,17 @@
   <MenuLogo />
   <el-menu :default-active="defaultActive" class="el-menu-vertical-demo"
     :collapse="isCollapse"
-    @open="handleOpen"
-    @close="handleClose"
     @select="handleSelect"
     background-color="#ffffff"
     :unique-opened="true"
     >
-    <MenuItemVue :menuList="menuList"></MenuItemVue>
+    <MenuItem :menuList="menuList"></MenuItem>
   </el-menu>
 </template>
 <script setup lang="ts">
 import { computed } from 'vue'
-import MenuItemVue from './MenuItem.vue'
-import MenuLogo from './menuLogo.vue'
+import MenuItem from './MenuItem.vue'
+import MenuLogo from './MenuLogo.vue'
 import { useRoute, useRouter } from 'vue-router'
 import useMenuStore from '@/store/menu'
 import type { NavItem } from '@/types'
@@ -23,29 +21,16 @@ const router = useRouter()
 const menuStore = useMenuStore()
 const route = useRoute()
 
-const isCollapse = computed(() => {
-  return menuStore.getCollapse
-})
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
+const isCollapse = computed(() => menuStore.getCollapse)
 const handleSelect = (index: string) => {
   router.push(index)
 }
 
-// 当前激活的菜单
-const defaultActive = computed(() => {
-  return route.path
-})
+const defaultActive = computed(() => route.path)
 
 // 菜单列表：从 menuStore 读取，数据由 loadDynamicRoutes 统一写入
 // 开发首次加载前若 store 为空，使用空数组占位，等待路由守卫触发加载
-const menuList = computed<NavItem[]>(() => {
-  return menuStore.getMenuList
-})
+const menuList = computed<NavItem[]>(() => menuStore.getMenuList)
 </script>
 <style scoped lang="scss">
 .el-menu-vertical-demo:not(.el-menu--collapse) {

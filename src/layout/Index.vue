@@ -10,7 +10,7 @@
         <el-main class="main">
           <div class="close-tabs">
             <Tabs class="tabs-content"/>
-            <ColseTabs />
+            <CloseTabs />
           </div>
           <router-view></router-view> 
         </el-main>
@@ -22,7 +22,7 @@
 import Header from '@/layout/header/Header.vue'
 import MenuBar from '@/layout/menu/MenuBar.vue'
 import Tabs from '@/layout/tabs/Tabs.vue'
-import ColseTabs from '@/layout/tabs/ColseTabs.vue'
+import CloseTabs from '@/layout/tabs/CloseTabs.vue'
 
 </script>
 
@@ -58,8 +58,6 @@ import ColseTabs from '@/layout/tabs/ColseTabs.vue'
         height: 33px !important;
         line-height: 33px !important;
         --el-tabs-header-height: 33px;
-      }
-      .tabs-content{
       }
     }
   }

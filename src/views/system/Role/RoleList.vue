@@ -27,14 +27,14 @@
       </template>
 
       <template #operation="{ row }">
-        <el-button v-permission="'roleList:edit'" type="primary" link size="small" @click="handleEdit(row)">
+        <el-button v-if="has('roleList:edit')" type="primary" link size="small" @click="handleEdit(row)">
           编辑
         </el-button>
-        <el-button v-permission="'roleList:grant'" type="warning" link size="small" @click="handleGrant(row)">
+        <el-button v-if="has('roleList:grant')" type="warning" link size="small" @click="handleGrant(row)">
           授权
         </el-button>
         <el-button
-          v-permission="'roleList:toggle'"
+          v-if="has('roleList:toggle')"
           :type="row.status === 'enabled' ? 'danger' : 'success'"
           link
           size="small"
@@ -60,10 +60,12 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
+import { usePermission } from '@/composables/usePermission'
 import RoleDialog from './RoleDialog.vue'
 import { getRolePage, toggleRoleStatus } from '@/mock/role'
 import type { RoleItem } from '@/mock/role'
 
+const { has } = usePermission()
 const loading = ref(false)
 const tableData = ref<RoleItem[]>([])
 const total = ref(0)

@@ -2,7 +2,6 @@
 
 import type { NavItem } from '@/types'
 
-// 定义后端返回的数据类型
 export interface BackendFunction {
   function_id: string
   function_name: string
@@ -26,7 +25,6 @@ export interface BackendFunction {
   state: string
 }
 
-// 转换后的路由类型
 export interface DynamicRoute {
   path: string
   name?: string | number | symbol
@@ -37,6 +35,26 @@ export interface DynamicRoute {
 }
 
 /**
+ * 构建父子关系映射与根节点列表
+ */
+function buildFunctionTree(functions: BackendFunction[]): {
+  roots: BackendFunction[]
+  childrenMap: Map<string, BackendFunction[]>
+} {
+  const childrenMap = new Map<string, BackendFunction[]>()
+  const roots: BackendFunction[] = []
+  for (const func of functions) {
+    if (func.pid === '0' || func.pid === '') {
+      roots.push(func)
+    } else {
+      if (!childrenMap.has(func.pid)) childrenMap.set(func.pid, [])
+      childrenMap.get(func.pid)!.push(func)
+    }
+  }
+  return { roots, childrenMap }
+}
+
+/**
  * 将后端功能数据转换为侧边栏渲染用的 NavItem 树形结构
  * 递归构建，仅包含有 URL 的菜单节点（根节点和叶子节点都需有 url）
  *
@@ -44,17 +62,7 @@ export interface DynamicRoute {
  * @returns 转换后的 NavItem 树形数组
  */
 export function backendToNavItems(functions: BackendFunction[]): NavItem[] {
-  const map = new Map<string, BackendFunction[]>()
-  const roots: BackendFunction[] = []
-
-  for (const func of functions) {
-    if (func.pid === '0' || func.pid === '') {
-      roots.push(func)
-    } else {
-      if (!map.has(func.pid)) map.set(func.pid, [])
-      map.get(func.pid)!.push(func)
-    }
-  }
+  const { roots, childrenMap: map } = buildFunctionTree(functions)
 
   const toNavItem = (func: BackendFunction): NavItem => {
     const children = map.get(func.id)
@@ -94,19 +102,7 @@ function loadComponentByFunctionCode(functionCode: string) {
  * @returns 转换后的叶子节点路由数组
  */
 export function transformFunctionsToRoutes(functions: BackendFunction[]): DynamicRoute[] {
-  const functionMap = new Map<string, BackendFunction[]>()
-  const rootFunctions: BackendFunction[] = []
-
-  functions.forEach(func => {
-    if (func.pid === '0' || func.pid === '') {
-      rootFunctions.push(func)
-    } else {
-      if (!functionMap.has(func.pid)) {
-        functionMap.set(func.pid, [])
-      }
-      functionMap.get(func.pid)!.push(func)
-    }
-  })
+  const { roots: rootFunctions, childrenMap: functionMap } = buildFunctionTree(functions)
 
   const leafRoutes: DynamicRoute[] = []
 
@@ -123,9 +119,7 @@ export function transformFunctionsToRoutes(functions: BackendFunction[]): Dynami
           meta: {
             title: func.text || func.function_name,
             icon: func.function_icon || func.iconCls,
-            // 以 function_code 作为页面访问权限编码（如 'roleList'）
-            // 路由守卫会校验用户 permissions 是否包含该编码，超级管理员绕过
-            roles: [func.function_code].filter(Boolean),
+            requiresAuth: true,
             functionId: func.function_id,
             functionCode: func.function_code,
             functionName: func.function_name,

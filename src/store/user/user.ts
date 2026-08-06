@@ -47,12 +47,6 @@ export const useUserStore = defineStore('user', () => {
     return codes.some((code) => permissions.includes(code))
   }
 
-  const hasRole = (role: string): boolean => {
-    if (isAdmin.value) return true
-    const roles = userInfo.value?.roles || []
-    return roles.includes(role)
-  }
-
   return {
     token,
     userInfo,
@@ -63,6 +57,5 @@ export const useUserStore = defineStore('user', () => {
     isAdmin,
     hasPermission,
     hasAnyPermission,
-    hasRole,
   }
 })

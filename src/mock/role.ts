@@ -62,11 +62,6 @@ export function updateRole(id: string, data: Partial<RoleItem>): Promise<Result<
   return mockResponse({} as RoleItem, '未找到该角色')
 }
 
-export function deleteRole(id: string): Promise<Result<null>> {
-  roleStore = roleStore.filter((r) => r.id !== id)
-  return mockResponse(null, '删除成功')
-}
-
 export function toggleRoleStatus(id: string, status: 'enabled' | 'disabled'): Promise<Result<RoleItem>> {
   const idx = roleStore.findIndex((r) => r.id === id)
   if (idx >= 0) {

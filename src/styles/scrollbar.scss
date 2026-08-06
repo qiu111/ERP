@@ -1,16 +1,5 @@
 /* src/styles/scrollbar.scss
- * 全局精致滚动条样式
- * - Webkit (Chrome/Safari/Edge) 下自定义滚动条宽度、圆角、hover 效果
- * - Firefox 下使用 scrollbar-width / scrollbar-color 兼容
- * - 深色背景下自动使用深色调
- */
-
-/* ============================================
-   通用滚动条容器（应用于侧边栏、内容区等）
-   使用方式：在需要精致滚动条的容器上加 class="scrollbar"
-   或在 ::v-deep 中对子元素应用
-   ============================================ */
-
+// 全局精致滚动条样式
 /* Webkit 系浏览器 */
 .scrollbar::-webkit-scrollbar,
 .el-menu--vertical::-webkit-scrollbar,
@@ -44,7 +33,7 @@
   background-color: rgba(144, 147, 153, 0.5);
 }
 
-/* 深色侧边栏专用 —— 覆盖 el-menu 内部滚动条 */
+// 深色侧边栏专用 —— 覆盖 el-menu 内部滚动条
 .el-menu--vertical::-webkit-scrollbar-thumb,
 .el-menu--vertical .el-menu::-webkit-scrollbar-thumb,
 .el-aside::-webkit-scrollbar-thumb {
@@ -65,9 +54,7 @@
   background: transparent;
 }
 
-/* ============================================
-   Firefox 兼容
-   ============================================ */
+// Firefox 兼容
 @supports (scrollbar-width: thin) {
   .scrollbar,
   .el-menu--vertical,
@@ -86,9 +73,7 @@
   }
 }
 
-/* ============================================
-   侧边栏布局修复 —— 确保单容器滚动
-   ============================================ */
+// 侧边栏布局修复 —— 确保单容器滚动
 .el-aside.left-menu {
   overflow: hidden;
 }

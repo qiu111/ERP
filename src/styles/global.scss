@@ -1,3 +1,12 @@
+/* 颜色变量 */
+$color-primary: #409eff;
+$color-success: #67c23a;
+$color-warning: #ffbc00;
+$color-danger: #f56c6c;
+$color-info: #909399;
+$color-text: #303133;
+$color-white: #ffffff;
+
 /* 全局样式：字体设置 */
 :root {
   --font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
@@ -11,7 +20,7 @@ body,
 #app {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  color: #303133;
+  color: $color-text;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -66,6 +75,17 @@ h1, h2, h3, h4, h5, h6,
   font-size: var(--font-size-base);
 }
 
+/* 自定义背景色按钮文字白色修复 */
+.el-button[style*='--el-button-bg-color'] {
+  color: $color-white !important;
+  -webkit-text-fill-color: $color-white !important;
+
+  span {
+    color: $color-white !important;
+    -webkit-text-fill-color: $color-white !important;
+  }
+}
+
 /* 状态标签公共样式 */
 .status-tag {
   font-size: 13px;
@@ -75,10 +95,10 @@ h1, h2, h3, h4, h5, h6,
 .status-active,
 .status-enabled,
 .status-normal {
-  color: #67c23a;
+  color: $color-success;
 }
 
 .status-inactive,
 .status-disabled {
-  color: #f56c6c;
+  color: $color-danger;
 }

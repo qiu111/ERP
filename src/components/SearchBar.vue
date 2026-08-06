@@ -77,24 +77,20 @@
 
       <el-form-item class="search-bar__actions">
         <el-button v-if="fields.length" type="primary" @click="handleSearch">
-          <el-icon><Search /></el-icon>
           搜索
         </el-button>
         <el-button v-if="fields.length" @click="handleReset">
           重置
         </el-button>
         <el-button
-          v-if="showAdd"
-          v-permission="addPermission"
+          v-if="showAdd && has(addPermission)"
           :color="addColor"
           @click="$emit('add')"
         >
-          <el-icon><Plus /></el-icon>
           添加
         </el-button>
         <el-button
-          v-if="showDownload"
-          v-permission="downloadPermission"
+          v-if="showDownload && has(downloadPermission)"
           :color="downloadColor"
           @click="$emit('download')"
         >
@@ -109,7 +105,8 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { Search, Plus, Download } from '@element-plus/icons-vue'
+import { Download } from '@element-plus/icons-vue'
+import { usePermission } from '@/composables/usePermission'
 
 export interface SearchField {
   prop: string
@@ -153,6 +150,8 @@ const emit = defineEmits<{
   (e: 'add'): void
   (e: 'download'): void
 }>()
+
+const { has } = usePermission()
 
 const innerModel = ref<Record<string, any>>(JSON.parse(JSON.stringify(props.modelValue || {})))
 

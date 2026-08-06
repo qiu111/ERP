@@ -21,11 +21,6 @@ export const mockRoleList = [
   '超级管理员'
 ]
 
-export const mockCompanyList = [
-  'A公司',
-  'B公司',
-]
-
 export const mockUserList: UserItem[] = [
   { id: 10181, username: 'A公司员工A', relatedUsername: '员工F员工A', nickname: 'A公司员工A', company: 'A公司', role: 'A公司助理', status: 'active', operator: '超级管理员', lastLoginTime: '2026-02-11 16:29', operateTime: '2026-02-11 16:29' },
   { id: 10160, username: 'A公司人事hr', relatedUsername: '员工F', nickname: 'A公司人事hr', company: 'A公司', role: 'A公司人事部经理', status: 'active', operator: '超级管理员', lastLoginTime: '2026-06-18 10:46', operateTime: '2026-01-06 10:24' },

@@ -38,14 +38,14 @@
       </template>
 
       <template #operation="{ row }">
-        <el-button v-permission="'userList:dataPermission'" type="warning" link size="small" @click="handleDataPermission(row)">
+        <el-button v-if="has('userList:dataPermission')" type="warning" link size="small" @click="handleDataPermission(row)">
           数据权限
         </el-button>
-        <el-button v-permission="'userList:edit'" type="primary" link size="small" @click="handleEdit(row)">
+        <el-button v-if="has('userList:edit')" type="primary" link size="small" @click="handleEdit(row)">
           编辑
         </el-button>
         <el-button
-          v-permission="'userList:toggle'"
+          v-if="has('userList:toggle')"
           :type="row.status === 'active' ? 'danger' : 'success'"
           link
           size="small"
@@ -72,6 +72,7 @@ import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
+import { usePermission } from '@/composables/usePermission'
 import UserDialog from './UserDialog.vue'
 import {
   getUserPage,
@@ -80,6 +81,7 @@ import {
 } from '@/mock/userAdmin'
 import type { UserItem } from '@/mock/userAdmin'
 
+const { has } = usePermission()
 const loading = ref(false)
 const tableData = ref<UserItem[]>([])
 const total = ref(0)

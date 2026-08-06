@@ -1,5 +1,5 @@
 // src/mock/menu.ts
-// 菜单/功能 mock 数据 — 与左侧导航 mockNavData 保持一致
+// 菜单/功能 mock 数据 — 左侧导航与功能管理的唯一数据源
 // 结构对齐 src/utils/dynamicRoutes.ts 的 BackendFunction
 import type { BackendFunction } from '@/utils/dynamicRoutes'
 
