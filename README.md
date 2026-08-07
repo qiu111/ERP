@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ERP-Demo
 
 基于 Vue 3 + TypeScript + Vite 的企业后台管理系统脚手架，提供动态路由、按钮级权限、Mock 数据切换、多环境配置等开箱即用的能力。
@@ -48,3 +49,8 @@ src/
 ```
 
 鉴权通过请求头 `token` 字段传递，由 Axios 请求拦截器自动从 `localStorage` 读取并注入。
+=======
+# Vue 3 + TypeScript + Vite
+
+<!-- pinia持久化插件 npm install pinia-plugin-persistedstate -->"# ERP-demo" 
+>>>>>>> c5d374c (first commit)
