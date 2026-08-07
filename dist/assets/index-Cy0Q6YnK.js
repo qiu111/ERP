@@ -1,1 +1,0 @@
-import{J as s}from"./index-D15sTKCi.js";const l=s("menu",{state:()=>({collapse:!1,menuList:[]}),getters:{getCollapse:e=>e.collapse,getMenuList:e=>e.menuList},actions:{setCollapse(e){this.collapse=e},setMenuList(e){this.menuList=e}}});export{l as default};
