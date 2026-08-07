@@ -1,8 +1,9 @@
-# ERP-Demo
+### ERP-Demo
 ```
-基于 Vue 3 + TypeScript + Vite 的企业后台管理系统脚手架，提供动态路由、按钮级权限、Mock 数据切换、多环境配置等开箱即用的能力。
+基于 Vue 3 + TypeScript + Vite 的企业后台管理系统脚手架，
+提供动态路由、按钮级权限、Mock 数据切换、多环境配置等开箱即用的能力。
 ```
-## 特性
+### 特性
 ```
 1、Vue 3 + Vite**：Composition API、`<script setup>`、极速冷启动与 HMR
 2、Element Plus**：按组件手动注册 + 按需样式，打包体积更小
