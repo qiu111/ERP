@@ -1,9 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy Vue H5 to GitHub Pages
 
 on:
   push:
     branches:
-      - main  # 监听 main 分支的推送，可根据实际情况修改为 master 或其他分支
+      - main
 
 permissions:
   contents: read
@@ -12,31 +12,31 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'  # 可根据项目需要调整版本
-          cache: 'npm'
+          node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      - name: Build
         run: npm run build
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist  # 构建产物目录，如果是其他目录请修改
+          path: dist
 
   deploy:
     needs: build
