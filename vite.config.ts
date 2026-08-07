@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  base: '/ERP-demo/',
+  base: '/ERP/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
