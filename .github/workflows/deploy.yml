@@ -1,4 +1,4 @@
-name: Deploy Vue H5 to GitHub Pages
+name: Deploy Vue ERP to GitHub Pages
 
 on:
   push:
