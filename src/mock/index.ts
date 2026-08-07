@@ -4,11 +4,11 @@ import type { Result } from '@/http'
 
 /**
  * 是否启用 mock 数据
- * - 仅在开发环境（DEV=true）且 VITE_USE_MOCK='true' 时启用
- * - 生产环境构建时整段 mock 分支会被树摇剔除
+ * - 当 VITE_USE_MOCK='true' 时启用（开发 / 生产环境均可）
+ * - 构建时 Vite 会将 import.meta.env.VITE_USE_MOCK 静态替换为对应值
  */
 export function isMockEnabled(): boolean {
-  return import.meta.env.DEV === true && import.meta.env.VITE_USE_MOCK === 'true'
+  return import.meta.env.VITE_USE_MOCK === 'true'
 }
 
 /**
