@@ -46,6 +46,9 @@ src/
 ├── App.vue
 └── main.ts             # 入口：注册 Element Plus 组件 / 指令、Pinia、Router
 ```
+
+
+
 ```
 鉴权通过请求头 `token` 字段传递，由 Axios 请求拦截器自动从 `localStorage` 读取并注入。
 ```
