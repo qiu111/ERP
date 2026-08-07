@@ -23,30 +23,26 @@ npm install
 npm run dev
 
 
+
 ```
 src/
-├── api/                # 业务接口（user.ts、function.ts），内部根据 isMockEnabled() 动态切换
+├── api/                # 接口请求层
+│   └── user.ts         # 用户相关接口
 ├── assets/             # 静态资源
-├── components/         # 通用组件（SearchBar、CommonTable 等）
-├── composables/        # 组合式函数（usePermission）
-├── http/               # Axios 封装 + Result<T> 类型
-├── layout/             # Layout 框架（Header、Menu、Tabs、Index）
-├── mock/               # 本地 Mock 数据（仅开发时生效）
-├── router/             # 路由表 + 全局守卫
-├── store/              # Pinia stores（user、menu、tabs）
-├── styles/             # 全局样式、滚动条样式
-├── types/              # 全局类型（NavItem、UserInfo、LoginResult）
-├── utils/              # 工具函数（dynamicRoutes.ts、menuIcons.ts）
-├── views/              # 页面视图
-│   ├── dashboard/      # 个人门户
-│   ├── login/          # 登录页
-│   ├── system/         # 系统管理（用户/角色/功能）
-│   ├── 403.vue         # 无权限页
-│   └── 404.vue         # 未找到页
-├── App.vue
-└── main.ts             # 入口：注册 Element Plus 组件 / 指令、Pinia、Router
+├── components/         # 通用组件
+├── composables/        # 组合式函数
+├── mock/               # Mock 数据
+│   ├── index.ts        # Mock 统一导出
+│   └── user.ts         # 用户模块 Mock
+├── router/             # 路由配置
+├── stores/             # Pinia 状态管理
+├── styles/             # 全局样式
+├── utils/              # 工具函数
+├── views/              # 页面级组件
+├── App.vue             # 根组件
+├── env.d.ts            # 环境变量类型声明
+└── main.ts             # 入口文件
 ```
-
 
 
 ```
