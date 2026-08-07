@@ -88,6 +88,8 @@ function loadComponentByFunctionCode(functionCode: string) {
     'userList': () => import('@/views/system/User/UserList.vue'),
     'roleList': () => import('@/views/system/Role/RoleList.vue'),
     'functionList': () => import('@/views/system/Function/FunctionList.vue'),
+    'companyInfo': () => import('@/views/system/Company/CompanyList.vue'),
+    'systemSetting': () => import('@/views/system/Setting/SystemSetting.vue'),
     'system': () => import('@/views/404.vue'),
     'goodsRoot': () => import('@/views/404.vue'),
     'oa': () => import('@/views/404.vue'),

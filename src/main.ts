@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+﻿import { createApp } from 'vue'
 import router from './router'
 import { createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persistedstate'
@@ -89,6 +89,8 @@ import 'element-plus/es/components/progress/style/css'
 import 'element-plus/es/components/empty/style/css'
 import 'element-plus/es/components/backtop/style/css'
 import 'element-plus/es/components/loading/style/css'
+import 'element-plus/es/components/message-box/style/css'
+import 'element-plus/es/components/message/style/css'
 
 const pinia = createPinia()
 pinia.use(piniaPersist)

@@ -1,4 +1,4 @@
-/* 颜色变量 */
+﻿/* 颜色变量 */
 $color-primary: #409eff;
 $color-success: #67c23a;
 $color-warning: #ffbc00;
@@ -101,4 +101,12 @@ h1, h2, h3, h4, h5, h6,
 .status-inactive,
 .status-disabled {
   color: $color-danger;
+}
+/* Element Plus 弹窗层级修复 */
+.el-overlay {
+  z-index: 2000 !important;
+}
+
+.el-message-box {
+  z-index: 2001 !important;
 }

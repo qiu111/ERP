@@ -44,12 +44,7 @@ const staticRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: () => import('@/views/404.vue'),
-    meta: { requiresAuth: false }
-  }
+  // 注意：404 兜底路由延迟到动态路由加载完成后注册，防止动态路由被提前匹配
 ]
 
 const router = createRouter({
@@ -60,6 +55,19 @@ const router = createRouter({
 // 动态路由加载状态
 let dynamicRoutesLoaded = false
 let loadPromise: Promise<void> | null = null
+let notFoundRouteAdded = false
+
+// 注册 404 兜底路由（必须在动态路由之后注册）
+function registerNotFoundRoute(router: any) {
+  if (notFoundRouteAdded) return
+  router.addRoute({
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/404.vue'),
+    meta: { requiresAuth: false }
+  })
+  notFoundRouteAdded = true
+}
 
 // 动态加载路由 - 登录成功后调用
 export async function loadDynamicRoutes() {
@@ -79,6 +87,8 @@ export async function loadDynamicRoutes() {
 
       dynamicRoutesLoaded = true
       addDynamicRoutes(router, filteredRoutes)
+      // 动态路由注册完成后，再注册 404 兜底路由，确保它最后匹配
+      registerNotFoundRoute(router)
 
       const menuStore = useMenuStore()
       menuStore.setMenuList(backendToNavItems(functionsData))
