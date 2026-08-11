@@ -6,6 +6,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     vue(),
   ],
+  base: '/ERP/',
   base: mode === 'production' ? './' : '/ERP/',
   resolve: {
     alias: {
