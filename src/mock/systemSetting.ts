@@ -1,4 +1,4 @@
-﻿import type { Result } from '@/http'
+import type { Result } from '@/http'
 
 export interface SystemSetting {
   web_name: string
@@ -16,7 +16,7 @@ export interface SystemSetting {
 const STORAGE_KEY = 'erp_system_setting'
 
 const defaultSetting: SystemSetting = {
-  web_name: '同盟ERP综管平台',
+  web_name: 'ERP综合管理平台',
   web_company: '科技',
   web_url: 'http://www.baidu.com/',
   web_hotline: '22222222',
@@ -25,7 +25,7 @@ const defaultSetting: SystemSetting = {
   web_keywords: '科技',
   web_website: '4548222',
   theme: '#008aff',
-  web_copyright: 'Copyright © 2017 - 2019 All right',
+  web_copyright: 'Copyright © 2025 - 2026 All right',
 }
 
 function loadFromStorage(): SystemSetting {
