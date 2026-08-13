@@ -18,15 +18,6 @@ const staticRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/403',
-    name: 'Forbidden',
-    component: () => import('@/views/403.vue'),
-    meta: {
-      title: '无访问权限',
-      requiresAuth: false
-    }
-  },
-  {
     path: '/',
     name: 'layout-root',
     component: () => import('@/layout/Index.vue'),
