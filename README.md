@@ -41,7 +41,6 @@ src/
 │   ├── dashboard/      # 个人门户
 │   ├── login/          # 登录页
 │   ├── system/         # 系统管理（用户/角色/功能）
-│   ├── 403.vue         # 无权限页
 │   └── 404.vue         # 未找到页
 ├── App.vue
 └── main.ts             # 入口：注册 Element Plus 组件 / 指令、Pinia、Router
