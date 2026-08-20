@@ -11,7 +11,7 @@ export function usePermission() {
    * @param code 权限编码；字符串为单个权限，数组为任一满足（OR）；空值视为放行
    */
   const has = (code?: string | string[]): boolean => {
-    if (!code || (Array.isArray(code) && code.length === 0)) return true
+    if (!code || (Array.isArray(code) && code.length === 0)) return true // 空值视为放行
     return Array.isArray(code)
       ? userStore.hasAnyPermission(code)
       : userStore.hasPermission(code)
