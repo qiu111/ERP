@@ -96,7 +96,7 @@ export const mockMenuList: BackendFunction[] = [
   item({ id: '3002', pid: '300', text: '销售管理', function_code: 'erp_sale', url: '/erp/sale', function_icon: 'Sell', group_code: 'erp' }),
   item({ id: '30021', pid: '3002', text: '外销PI', function_code: 'erp_sale_pi', url: '/erp/sale/pi', function_icon: 'Document', group_code: 'erp' }),
   item({ id: '30022', pid: '3002', text: '销售订单', function_code: 'erp_sale_order', url: '/erp/sale/order', function_icon: 'List', group_code: 'erp' }),
-  item({ id: '30023', pid: '3002', text: '销售出库', function_code: 'erp_sale_outbound', url: '/erp/sale/outbound', function_icon: 'Upload', group_code: 'erp' }),
+  item({ id: '30023', pid: '3002', text: '销售出库', function_code: 'erp_sale_delivery', url: '/erp/sale/outbound', function_icon: 'Upload', group_code: 'erp' }),
   item({ id: '30024', pid: '3002', text: '销售退货', function_code: 'erp_sale_return', url: '/erp/sale/return', function_icon: 'RefreshLeft', group_code: 'erp' }),
   // 库存管理
   item({ id: '3003', pid: '300', text: '库存管理', function_code: 'erp_stock', url: '/erp/stock', function_icon: 'Box', group_code: 'erp' }),
