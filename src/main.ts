@@ -1,10 +1,11 @@
 ﻿import { createApp } from 'vue'
-import router from './router'
+import router, { loadDynamicRoutes } from './router'
 import { createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import '@/styles/global.scss'
 import '@/styles/scrollbar.scss'
+import { useUserStore } from '@/store/user/user'
 
 // Element Plus 组件按需导入
 import {
@@ -21,6 +22,7 @@ import {
   ElOption,
   ElDatePicker,
   ElInputNumber,
+  ElTree,
   ElTreeSelect,
   ElRadio,
   ElRadioGroup,
@@ -63,6 +65,7 @@ import 'element-plus/es/components/select/style/css'
 import 'element-plus/es/components/option/style/css'
 import 'element-plus/es/components/date-picker/style/css'
 import 'element-plus/es/components/input-number/style/css'
+import 'element-plus/es/components/tree/style/css'
 import 'element-plus/es/components/tree-select/style/css'
 import 'element-plus/es/components/radio/style/css'
 import 'element-plus/es/components/radio-group/style/css'
@@ -97,6 +100,8 @@ pinia.use(piniaPersist)
 
 const app = createApp(App)
 
+app.use(pinia)
+
 // 注册 Element Plus 组件
 app.component('ElButton', ElButton)
 app.component('ElIcon', ElIcon)
@@ -111,6 +116,7 @@ app.component('ElSelect', ElSelect)
 app.component('ElOption', ElOption)
 app.component('ElDatePicker', ElDatePicker)
 app.component('ElInputNumber', ElInputNumber)
+app.component('ElTree', ElTree)
 app.component('ElTreeSelect', ElTreeSelect)
 app.component('ElRadio', ElRadio)
 app.component('ElRadioGroup', ElRadioGroup)
@@ -140,6 +146,20 @@ app.component('ElBacktop', ElBacktop)
 // 注册 Element Plus 指令
 app.directive('loading', ElLoading.directive)
 
-app.use(pinia)
-app.use(router)
-app.mount('#app')
+// 在使用路由前检查登录状态，提前加载动态路由
+// 避免刷新页面时 Router 解析 URL 找不到匹配路由而发出警告
+async function bootstrap() {
+  const userStore = useUserStore()
+  if (userStore.isAuthenticated) {
+    try {
+      await loadDynamicRoutes()
+    } catch (e) {
+      console.error('提前加载动态路由失败:', e)
+    }
+  }
+
+  app.use(router)
+  app.mount('#app')
+}
+
+bootstrap()
