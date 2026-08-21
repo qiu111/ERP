@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => ({
     vue(),
   ],
   base: '/ERP/',
-  base: mode === 'production' ? './' : '/ERP/',
+  // base: mode === 'production' ? './' : '/ERP/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
