@@ -2,12 +2,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [
     vue(),
   ],
+  // 部署在 GitHub Pages 时使用 '/ERP/' 作为 base；如需自适应模式可改回：
+  // base: mode === 'production' ? './' : '/ERP/'
   base: '/ERP/',
-  // base: mode === 'production' ? './' : '/ERP/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
