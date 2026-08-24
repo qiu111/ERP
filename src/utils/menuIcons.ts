@@ -49,6 +49,8 @@ import {
   Trophy,
   Setting,
   Tools,
+  // @element-plus/icons-vue 中并不存在名为 Warehouse 的导出图标
+  Box as Warehouse,
 } from '@element-plus/icons-vue'
 
 const menuIcons: Record<string, any> = {
@@ -102,6 +104,7 @@ const menuIcons: Record<string, any> = {
   Trophy,
   Setting,
   Tools,
+  Warehouse,
 }
 
 export default menuIcons

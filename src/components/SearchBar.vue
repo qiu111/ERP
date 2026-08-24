@@ -199,7 +199,7 @@ const handleReset = () => {
 </script>
 
 <style scoped lang="scss">
-.search-bar {
+.search-bar { 
   padding: 16px 16px 0;
   background: #fff;
   border-radius: 4px;
