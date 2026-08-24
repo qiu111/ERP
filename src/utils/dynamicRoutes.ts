@@ -98,6 +98,8 @@ function loadComponentByFunctionCode(functionCode: string) {
     'erp_sale_order': () => import('@/views/erp/sale/OrderList.vue'),
     'erp_sale_delivery': () => import('@/views/erp/sale/DeliveryList.vue'),
     'erp_sale_return': () => import('@/views/erp/sale/ReturnList.vue'),
+    'erp_stock_summary': () => import('@/views/erp/stock/SummaryList.vue'),
+    'erp_stock_detail': () => import('@/views/erp/stock/DetailList.vue'),
     'system': () => import('@/views/404.vue'),
     'goodsRoot': () => import('@/views/404.vue'),
     'oa': () => import('@/views/404.vue'),

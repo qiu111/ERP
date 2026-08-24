@@ -15,6 +15,7 @@
       :max-height="maxHeight"
       :tree-props="resolvedTreeProps"
       :default-expand-all="defaultExpandAll"
+      :fit="fit"
       @selection-change="handleSelectionChange"
       @row-click="handleRowClick"
       style="width: 100%"
@@ -120,6 +121,7 @@ interface Props {
   maxHeight?: string | number
   operationWidth?: number
   pagination?: boolean
+  fit?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -136,6 +138,7 @@ const props = withDefaults(defineProps<Props>(), {
   defaultExpandAll: false,
   operationWidth: 260,
   pagination: true,
+  fit: false,
 })
 
 const resolvedPageSizes = computed(() => props.pageSizes ?? [10, 20, 50, 100])

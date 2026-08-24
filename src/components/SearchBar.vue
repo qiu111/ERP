@@ -60,6 +60,19 @@
           </el-form-item>
 
           <el-form-item
+            v-else-if="field.type === 'checkbox'"
+            :label="field.label"
+            :prop="field.prop"
+          >
+            <el-checkbox
+              v-model="innerModel[field.prop]"
+              @change="handleFieldChange"
+            >
+              {{ field.placeholder || field.label }}
+            </el-checkbox>
+          </el-form-item>
+
+          <el-form-item
             v-else
             :label="field.label"
             :prop="field.prop"
@@ -111,11 +124,12 @@ import { usePermission } from '@/composables/usePermission'
 export interface SearchField {
   prop: string
   label: string
-  type: 'input' | 'select' | 'date' | 'daterange'
+  type: 'input' | 'select' | 'date' | 'daterange' | 'checkbox'
   placeholder?: string
   startPlaceholder?: string
   endPlaceholder?: string
   options?: { label: string; value: any }[]
+  defaultValue?: any
 }
 
 interface Props {
@@ -175,7 +189,7 @@ const handleSearch = () => {
 const handleReset = () => {
   const resetModel: Record<string, any> = {}
   props.fields.forEach((f) => {
-    resetModel[f.prop] = ''
+    resetModel[f.prop] = f.type === 'checkbox' ? (f.defaultValue ?? false) : ''
   })
   innerModel.value = resetModel
   emit('update:modelValue', { ...resetModel })
