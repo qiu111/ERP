@@ -6,100 +6,7 @@ import App from './App.vue'
 import '@/styles/global.scss'
 import '@/styles/scrollbar.scss'
 import { useUserStore } from '@/store/user/user'
-
-// Element Plus 组件按需导入
-import {
-  ElButton,
-  ElButtonGroup,
-  ElIcon,
-  ElTable,
-  ElTableColumn,
-  ElPagination,
-  ElDialog,
-  ElForm,
-  ElFormItem,
-  ElInput,
-  ElSelect,
-  ElOption,
-  ElDatePicker,
-  ElInputNumber,
-  ElTree,
-  ElTreeSelect,
-  ElRadio,
-  ElRadioGroup,
-  ElTabs,
-  ElTabPane,
-  ElMenu,
-  ElMenuItem,
-  ElSubMenu,
-  ElContainer,
-  ElAside,
-  ElHeader,
-  ElMain,
-  ElRow,
-  ElCol,
-  ElTag,
-  ElDropdown,
-  ElDropdownMenu,
-  ElDropdownItem,
-  ElBreadcrumb,
-  ElBreadcrumbItem,
-  ElAvatar,
-  ElBadge,
-  ElProgress,
-  ElEmpty,
-  ElBacktop,
-  ElLoading,
-  ElImage,
-  ElCheckbox,
-} from 'element-plus'
-
-// Element Plus 样式
-import 'element-plus/es/components/button/style/css'
-import 'element-plus/es/components/button-group/style/css'
-import 'element-plus/es/components/icon/style/css'
-import 'element-plus/es/components/table/style/css'
-import 'element-plus/es/components/table-column/style/css'
-import 'element-plus/es/components/pagination/style/css'
-import 'element-plus/es/components/dialog/style/css'
-import 'element-plus/es/components/form/style/css'
-import 'element-plus/es/components/form-item/style/css'
-import 'element-plus/es/components/input/style/css'
-import 'element-plus/es/components/select/style/css'
-import 'element-plus/es/components/option/style/css'
-import 'element-plus/es/components/date-picker/style/css'
-import 'element-plus/es/components/input-number/style/css'
-import 'element-plus/es/components/tree/style/css'
-import 'element-plus/es/components/tree-select/style/css'
-import 'element-plus/es/components/radio/style/css'
-import 'element-plus/es/components/radio-group/style/css'
-import 'element-plus/es/components/tabs/style/css'
-import 'element-plus/es/components/tab-pane/style/css'
-import 'element-plus/es/components/menu/style/css'
-import 'element-plus/es/components/menu-item/style/css'
-import 'element-plus/es/components/sub-menu/style/css'
-import 'element-plus/es/components/container/style/css'
-import 'element-plus/es/components/aside/style/css'
-import 'element-plus/es/components/header/style/css'
-import 'element-plus/es/components/main/style/css'
-import 'element-plus/es/components/row/style/css'
-import 'element-plus/es/components/col/style/css'
-import 'element-plus/es/components/tag/style/css'
-import 'element-plus/es/components/dropdown/style/css'
-import 'element-plus/es/components/dropdown-menu/style/css'
-import 'element-plus/es/components/dropdown-item/style/css'
-import 'element-plus/es/components/breadcrumb/style/css'
-import 'element-plus/es/components/breadcrumb-item/style/css'
-import 'element-plus/es/components/avatar/style/css'
-import 'element-plus/es/components/badge/style/css'
-import 'element-plus/es/components/progress/style/css'
-import 'element-plus/es/components/empty/style/css'
-import 'element-plus/es/components/backtop/style/css'
-import 'element-plus/es/components/loading/style/css'
-import 'element-plus/es/components/image/style/css'
-import 'element-plus/es/components/checkbox/style/css'
-import 'element-plus/es/components/message-box/style/css'
-import 'element-plus/es/components/message/style/css'
+import { setupElementPlus } from '@/utils/elementPlus'
 
 const pinia = createPinia()
 pinia.use(piniaPersist)
@@ -108,52 +15,8 @@ const app = createApp(App)
 
 app.use(pinia)
 
-// 注册 Element Plus 组件
-app.component('ElButton', ElButton)
-app.component('ElButtonGroup', ElButtonGroup)
-app.component('ElIcon', ElIcon)
-app.component('ElTable', ElTable)
-app.component('ElTableColumn', ElTableColumn)
-app.component('ElPagination', ElPagination)
-app.component('ElDialog', ElDialog)
-app.component('ElForm', ElForm)
-app.component('ElFormItem', ElFormItem)
-app.component('ElInput', ElInput)
-app.component('ElSelect', ElSelect)
-app.component('ElOption', ElOption)
-app.component('ElDatePicker', ElDatePicker)
-app.component('ElInputNumber', ElInputNumber)
-app.component('ElTree', ElTree)
-app.component('ElTreeSelect', ElTreeSelect)
-app.component('ElRadio', ElRadio)
-app.component('ElRadioGroup', ElRadioGroup)
-app.component('ElTabs', ElTabs)
-app.component('ElTabPane', ElTabPane)
-app.component('ElMenu', ElMenu)
-app.component('ElMenuItem', ElMenuItem)
-app.component('ElSubMenu', ElSubMenu)
-app.component('ElContainer', ElContainer)
-app.component('ElAside', ElAside)
-app.component('ElHeader', ElHeader)
-app.component('ElMain', ElMain)
-app.component('ElRow', ElRow)
-app.component('ElCol', ElCol)
-app.component('ElTag', ElTag)
-app.component('ElDropdown', ElDropdown)
-app.component('ElDropdownMenu', ElDropdownMenu)
-app.component('ElDropdownItem', ElDropdownItem)
-app.component('ElBreadcrumb', ElBreadcrumb)
-app.component('ElBreadcrumbItem', ElBreadcrumbItem)
-app.component('ElAvatar', ElAvatar)
-app.component('ElBadge', ElBadge)
-app.component('ElProgress', ElProgress)
-app.component('ElEmpty', ElEmpty)
-app.component('ElBacktop', ElBacktop)
-app.component('ElImage', ElImage)
-app.component('ElCheckbox', ElCheckbox)
-
-// 注册 Element Plus 指令
-app.directive('loading', ElLoading.directive)
+// 注册 Element Plus 组件与指令
+setupElementPlus(app)
 
 // 在使用路由前检查登录状态，提前加载动态路由
 // 避免刷新页面时 Router 解析 URL 找不到匹配路由而发出警告
