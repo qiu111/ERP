@@ -19,7 +19,7 @@
       :current-page="currentPage"
       :page-size="pageSize"
       :row-key="'id'"
-      fit="false"
+      :fit="false"
       @page-change="handlePageChange"
       @page-size-change="handleSizeChange"
     >
@@ -95,6 +95,7 @@ import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
+import useListPage from '@/composables/useListPage'
 import {
   getStockDiffPage,
   warehouseOptions,
@@ -103,11 +104,16 @@ import {
   type StockDiffRecord,
 } from '@/mock/stockDiffQuery'
 
-const loading = ref(false)
 const tableData = ref<StockDiffRecord[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+} = useListPage()
 
 let searchModel = reactive<Record<string, any>>({
   checkNo: '',
@@ -185,18 +191,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
-
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1

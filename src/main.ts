@@ -10,6 +10,7 @@ import { useUserStore } from '@/store/user/user'
 // Element Plus 组件按需导入
 import {
   ElButton,
+  ElButtonGroup,
   ElIcon,
   ElTable,
   ElTableColumn,
@@ -55,6 +56,7 @@ import {
 
 // Element Plus 样式
 import 'element-plus/es/components/button/style/css'
+import 'element-plus/es/components/button-group/style/css'
 import 'element-plus/es/components/icon/style/css'
 import 'element-plus/es/components/table/style/css'
 import 'element-plus/es/components/table-column/style/css'
@@ -108,6 +110,7 @@ app.use(pinia)
 
 // 注册 Element Plus 组件
 app.component('ElButton', ElButton)
+app.component('ElButtonGroup', ElButtonGroup)
 app.component('ElIcon', ElIcon)
 app.component('ElTable', ElTable)
 app.component('ElTableColumn', ElTableColumn)

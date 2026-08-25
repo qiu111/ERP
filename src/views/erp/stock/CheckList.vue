@@ -77,12 +77,13 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import CheckDialog from './CheckDialog.vue'
 import {
   getStockCheckPage,
@@ -95,17 +96,12 @@ import {
 } from '@/mock/stockCheck'
 
 const { has } = usePermission()
-const loading = ref(false)
 const tableData = ref<StockCheck[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
-
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit' | 'view'>('add')
 const currentRecord = ref<StockCheck | null>(null)
 
-let searchModel = reactive<Record<string, any>>({
+const searchModel = reactive<Record<string, any>>({
   checkNo: '',
   warehouse: '',
   auditStatus: '',
@@ -114,6 +110,17 @@ let searchModel = reactive<Record<string, any>>({
   startDate: '',
   endDate: '',
 })
+
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 
 const searchFields: SearchField[] = [
   { prop: 'checkNo', label: '单号', type: 'input', placeholder: '单据编号' },
@@ -186,18 +193,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
-
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -234,28 +230,9 @@ const handleView = (row: StockCheck) => {
   dialogVisible.value = true
 }
 
-const handleDelete = async (row: StockCheck) => {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除库存盘点单「${row.checkNo}」吗？`,
-      '提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    await deleteStockCheck(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch {
-    // 用户取消
-  }
-}
+const handleDelete = (row: StockCheck) => confirmDelete(deleteStockCheck, row, row.checkNo)
 
-onMounted(() => {
-  loadData()
-})
+onMounted(loadData)
 </script>
 
 <style scoped lang="scss">

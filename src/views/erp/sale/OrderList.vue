@@ -95,12 +95,13 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import OrderDialog from './OrderDialog.vue'
 import {
   getSaleOrderPage,
@@ -117,11 +118,17 @@ import {
 import type { SaleOrder } from '@/mock/saleOrder'
 
 const { has } = usePermission()
-const loading = ref(false)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 const tableData = ref<SaleOrder[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit' | 'view'>('add')
@@ -238,17 +245,7 @@ const loadData = async () => {
   }
 }
 
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -288,24 +285,7 @@ const handleView = (row: SaleOrder) => {
   dialogVisible.value = true
 }
 
-const handleDelete = async (row: SaleOrder) => {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除销售订单「${row.orderNo}」吗？`,
-      '提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    await deleteSaleOrder(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch {
-    // 用户取消
-  }
-}
+const handleDelete = (row: SaleOrder) => confirmDelete(deleteSaleOrder, row, row.orderNo)
 
 const handleExport = () => {
   ElMessage.success('导出功能开发中...')

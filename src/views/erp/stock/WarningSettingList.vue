@@ -222,6 +222,7 @@ import {
 // 模板中使用 <Warehouse /> ，但 @element-plus/icons-vue 中不存在名为 Warehouse 的图标
 // 使用语义最接近的 Box（盒子/仓库货架）图标作为替代
 const Warehouse = Box
+import useListPage from '@/composables/useListPage'
 import {
   getWarningSettingPage,
   batchUpdateWarningQty,
@@ -231,12 +232,16 @@ import {
   type WarningSettingRecord,
 } from '@/mock/stockWarning'
 
-const loading = ref(false)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handleSizeChange,
+  setLoadFn,
+} = useListPage()
 const viewMode = ref(false)
 const tableData = ref<WarningSettingRecord[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 const activeWarehouse = ref('__all__')
 const notifyCount = ref(0)
@@ -321,6 +326,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
+setLoadFn(loadData)
 
 const loadNotifyCount = async () => {
   try {
@@ -349,12 +355,6 @@ const handleSearch = () => {
 
 const handlePageChange = (page: number) => {
   currentPage.value = page
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 

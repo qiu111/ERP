@@ -61,16 +61,23 @@ import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import RoleDialog from './RoleDialog.vue'
 import { getRolePage, toggleRoleStatus } from '@/mock/role'
 import type { RoleItem } from '@/mock/role'
 
 const { has } = usePermission()
-const loading = ref(false)
 const tableData = ref<RoleItem[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit'>('add')
@@ -99,18 +106,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
-
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+setLoadFn(loadData)
 
 const handleAdd = () => {
   dialogMode.value = 'add'

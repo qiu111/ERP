@@ -81,12 +81,13 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import ReceiveDialog from './ReceiveDialog.vue'
 import {
   getPurchaseReceivePage,
@@ -100,11 +101,17 @@ import {
 import type { PurchaseReceive } from '@/mock/purchaseReceive'
 
 const { has } = usePermission()
-const loading = ref(false)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 const tableData = ref<PurchaseReceive[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit' | 'view'>('add')
@@ -202,18 +209,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
-
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -251,23 +247,8 @@ const handleView = (row: PurchaseReceive) => {
   dialogVisible.value = true
 }
 
-const handleDelete = async (row: PurchaseReceive) => {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除采购收货单「${row.receiveNo}」吗？`,
-      '提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    await deletePurchaseReceive(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch {
-    // 用户取消
-  }
+const handleDelete = (row: PurchaseReceive) => {
+  confirmDelete(deletePurchaseReceive, row, row.receiveNo)
 }
 
 onMounted(() => {

@@ -73,6 +73,7 @@ import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import UserDialog from './UserDialog.vue'
 import {
   getUserPage,
@@ -82,11 +83,17 @@ import {
 import type { UserItem } from '@/mock/userAdmin'
 
 const { has } = usePermission()
-const loading = ref(false)
 const tableData = ref<UserItem[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 
 const searchParams = ref<Record<string, any>>({
   status: '',
@@ -163,6 +170,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -176,18 +184,6 @@ const handleReset = () => {
     lastLoginDate: '',
     keyword: '',
   }
-  currentPage.value = 1
-  loadData()
-}
-
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
   currentPage.value = 1
   loadData()
 }

@@ -108,6 +108,7 @@ function loadComponentByFunctionCode(functionCode: string) {
     'erp_agent_order': () => import('@/views/erp/agent/AgentOrderList.vue'),
     'erp_agent_return': () => import('@/views/erp/agent/AgentReturnList.vue'),
     'erp_agent_outbound': () => import('@/views/erp/agent/AgentOutboundList.vue'),
+    'erp_goods_self': () => import('@/views/erp/goods/SelfGoodsList.vue'),
     'system': () => import('@/views/404.vue'),
     'goodsRoot': () => import('@/views/404.vue'),
     'oa': () => import('@/views/404.vue'),

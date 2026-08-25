@@ -87,12 +87,13 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import AgentOrderDialog from './AgentOrderDialog.vue'
 import {
   getAgentOrderPage,
@@ -104,11 +105,17 @@ import {
 import type { AgentOrder } from '@/mock/agentOrder'
 
 const { has } = usePermission()
-const loading = ref(false)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 const tableData = ref<AgentOrder[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit' | 'view'>('add')
@@ -185,18 +192,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
-
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -232,24 +228,8 @@ const handleView = (row: AgentOrder) => {
   dialogVisible.value = true
 }
 
-const handleDelete = async (row: AgentOrder) => {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除代理商要货单「${row.orderNo}」吗？`,
-      '提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    await deleteAgentOrder(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch {
-    // 用户取消
-  }
-}
+const handleDelete = (row: AgentOrder) =>
+  confirmDelete(deleteAgentOrder, row, row.orderNo)
 
 const handleExport = () => {
   ElMessage.success('导出功能开发中...')

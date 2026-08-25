@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="company-list">
     <SearchBar
       title="公司信息管理"
@@ -52,16 +52,23 @@ import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import CompanyDialog from './CompanyDialog.vue'
 import { getCompanyPage, deleteCompany } from '@/mock/company'
 import type { CompanyItem } from '@/mock/company'
 
 const { has } = usePermission()
-const loading = ref(false)
 const tableData = ref<CompanyItem[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 
 const searchParams = ref<Record<string, any>>({
   keyword: '',
@@ -107,6 +114,7 @@ const loadData = async () => {
     loading.value = false
   }
 }
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -117,18 +125,6 @@ const handleReset = () => {
   searchParams.value = {
     keyword: '',
   }
-  currentPage.value = 1
-  loadData()
-}
-
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
   currentPage.value = 1
   loadData()
 }
@@ -151,19 +147,7 @@ const handleDetail = (row: CompanyItem) => {
   dialogVisible.value = true
 }
 
-const handleDelete = async (row: CompanyItem) => {
-  try {
-    await ElMessageBox.confirm(`确定要删除「${row.companyName}」吗？`, '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    })
-    await deleteCompany(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch {
-  }
-}
+const handleDelete = (row: CompanyItem) => confirmDelete(deleteCompany, row, row.companyName)
 
 onMounted(() => {
   loadData()

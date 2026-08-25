@@ -15,7 +15,7 @@
       :max-height="maxHeight"
       :tree-props="resolvedTreeProps"
       :default-expand-all="defaultExpandAll"
-      :fit="fit"
+      :fit="resolvedFit"
       @selection-change="handleSelectionChange"
       @row-click="handleRowClick"
       style="width: 100%"
@@ -143,6 +143,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 const resolvedPageSizes = computed(() => props.pageSizes ?? [10, 20, 50, 100])
 const resolvedTreeProps = computed(() => props.treeProps ?? { children: 'children' })
+// 统一 fit 为布尔值：即使调用方传字符串 "true"/"false"，也不会在 ElTable 触发 prop 类型警告
+const resolvedFit = computed<boolean>(() => {
+  const v: any = (props as any).fit
+  if (typeof v === 'boolean') return v
+  if (typeof v === 'string') return v === 'true' || v === ''
+  return Boolean(v)
+})
 
 const emit = defineEmits<{
   (e: 'page-change', page: number, pageSize: number): void

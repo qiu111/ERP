@@ -77,12 +77,12 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
+import useListPage from '@/composables/useListPage'
 import DeliveryDialog from './DeliveryDialog.vue'
 import {
   getSaleDeliveryPage,
@@ -96,11 +96,17 @@ import {
 import type { SaleDelivery } from '@/mock/saleDelivery'
 
 const { has } = usePermission()
-const loading = ref(false)
+const {
+  currentPage,
+  pageSize,
+  total,
+  loading,
+  handlePageChange,
+  handleSizeChange,
+  setLoadFn,
+  confirmDelete,
+} = useListPage()
 const tableData = ref<SaleDelivery[]>([])
-const total = ref(0)
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit' | 'view'>('add')
@@ -197,17 +203,7 @@ const loadData = async () => {
   }
 }
 
-const handlePageChange = (page: number, size: number) => {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+setLoadFn(loadData)
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -245,24 +241,7 @@ const handleView = (row: SaleDelivery) => {
   dialogVisible.value = true
 }
 
-const handleDelete = async (row: SaleDelivery) => {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除销售出库单「${row.deliveryNo}」吗？`,
-      '提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    await deleteSaleDelivery(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch {
-    // 用户取消
-  }
-}
+const handleDelete = (row: SaleDelivery) => confirmDelete(deleteSaleDelivery, row, row.deliveryNo)
 
 onMounted(() => {
   loadData()
