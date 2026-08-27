@@ -120,7 +120,7 @@ export const mockMenuList: BackendFunction[] = [
   item({ id: '30054', pid: '3005', text: '商品分类管理', function_code: 'erp_goods_category', url: '/erp/goods/category', function_icon: 'Menu', group_code: 'erp' }),
   item({ id: '30055', pid: '3005', text: '商品模型管理', function_code: 'erp_goods_model', url: '/erp/goods/model', function_icon: 'Grid', group_code: 'erp' }),
   item({ id: '30056', pid: '3005', text: '商品规格管理', function_code: 'erp_goods_spec', url: '/erp/goods/spec', function_icon: 'CopyDocument', group_code: 'erp' }),
-  item({ id: '30057', pid: '3005', text: '商品属性管理', function_code: 'erp_goods_attr', url: '/erp/goods/attr', function_icon: 'Collection', group_code: 'erp' }),
+  item({ id: '30057', pid: '3005', text: '商品属性管理', function_code: 'erp_goods_attribute', url: '/erp/goods/attribute', function_icon: 'Collection', group_code: 'erp' }),
   item({ id: '30058', pid: '3005', text: '商品品牌管理', function_code: 'erp_goods_brand', url: '/erp/goods/brand', function_icon: 'Medal', group_code: 'erp' }),
   // 合同管理
   item({ id: '3006', pid: '300', text: '合同管理', function_code: 'erp_contract', url: '/erp/contract', function_icon: 'Document', group_code: 'erp' }),

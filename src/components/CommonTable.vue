@@ -28,12 +28,11 @@ import type { TableInstance } from 'element-plus'
         :reserve-selection="true"
       />
 
-      <template v-for="col in columns" :key="col.key || col.prop || col.label">
+      <template v-for="(col, colIndex) in resolvedColumns" :key="col.key || col.prop || col.label">
         <el-table-column
           :prop="col.prop"
           :label="col.label"
-          :width="col.width"
-          :min-width="col.minWidth"
+          v-bind="getColumnBindings(col)"
           :align="col.align || 'left'"
           :header-align="col.headerAlign"
           :fixed="col.fixed"
@@ -136,7 +135,7 @@ const props = withDefaults(defineProps<Props>(), {
   defaultExpandAll: false,
   operationWidth: 260,
   pagination: true,
-  fit: false,
+  fit: true,
 })
 
 const resolvedPageSizes = computed(() => props.pageSizes ?? [10, 20, 50, 100])
@@ -148,6 +147,35 @@ const resolvedFit = computed<boolean>(() => {
   if (typeof v === 'string') return v === 'true' || v === ''
   return Boolean(v)
 })
+
+// 处理列配置：当所有列都使用固定 width 时，自动将最后一个数据列改为 minWidth 以实现自适应
+const resolvedColumns = computed(() => {
+  const cols = [...props.columns]
+  // 检查是否有列使用了 minWidth 或没有 width
+  const hasFlexibleColumn = cols.some((c) => !c.width || c.minWidth)
+  if (!hasFlexibleColumn && cols.length > 0) {
+    // 将最后一个数据列（非操作列）改为 minWidth
+    const lastIndex = cols.length - 1
+    const lastCol = { ...cols[lastIndex] }
+    const origWidth = lastCol.width || 120
+    delete lastCol.width
+    lastCol.minWidth = origWidth
+    cols[lastIndex] = lastCol
+  }
+  return cols
+})
+
+// 根据列配置生成 el-table-column 的绑定属性
+const getColumnBindings = (col: TableColumn) => {
+  const bindings: Record<string, any> = {}
+  if (col.width != null) {
+    bindings.width = col.width
+  }
+  if (col.minWidth != null) {
+    bindings['min-width'] = col.minWidth
+  }
+  return bindings
+}
 
 const emit = defineEmits<{
   (e: 'page-change', page: number, pageSize: number): void
