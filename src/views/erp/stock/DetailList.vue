@@ -71,8 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
+
 import { Picture } from '@element-plus/icons-vue'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'

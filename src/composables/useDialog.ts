@@ -1,4 +1,3 @@
-import { reactive } from 'vue'
 import type { DialogType } from '@/types'
 
 export default function useDialog() {

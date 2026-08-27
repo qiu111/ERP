@@ -499,9 +499,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+
 import { Plus } from '@element-plus/icons-vue'
+import type { FormInstance, FormRules } from 'element-plus'
 import ProfitEstimateDialog from './ProfitEstimateDialog.vue'
 import {
   addSaleOrder,

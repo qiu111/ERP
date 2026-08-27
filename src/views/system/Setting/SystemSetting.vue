@@ -65,9 +65,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { getSystemSetting, saveSystemSetting, type SystemSetting } from '@/mock/systemSetting'
+import type { FormInstance, FormRules } from 'element-plus'
 
 const formRef = ref<FormInstance>()
 const loading = ref(false)

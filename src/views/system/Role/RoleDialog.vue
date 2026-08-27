@@ -52,9 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import { addRole, updateRole } from '@/mock/role'
+import type { FormInstance, FormRules } from 'element-plus'
 import type { RoleItem } from '@/mock/role'
 
 interface Props {

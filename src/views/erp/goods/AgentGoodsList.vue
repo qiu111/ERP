@@ -1,5 +1,5 @@
 <template>
-  <div class="self-goods-list">
+  <div class="agent-goods-list">
     <!-- 左侧分类树 -->
     <CategoryTree
       :options="categoryOptions"
@@ -7,9 +7,9 @@
     />
 
     <!-- 右侧内容区 -->
-    <div class="self-goods-list__content">
+    <div class="agent-goods-list__content">
       <SearchBar
-        title="自采商品管理"
+        title="代理商商品管理"
         :fields="searchFields"
         v-model="searchModel"
         show-add
@@ -47,12 +47,16 @@
           <span class="product-name">{{ row.productName }}</span>
         </template>
 
-        <template #column-productCode="{ row }">
-          <span>{{ row.productCode }}</span>
+        <template #column-spec="{ row }">
+          <span>{{ row.spec || '-' }}</span>
         </template>
 
-        <template #column-purchasePrice="{ row }">
-          <span class="price">¥{{ row.purchasePrice.toFixed(2) }}</span>
+        <template #column-barcode="{ row }">
+          <span>{{ row.barcode }}</span>
+        </template>
+
+        <template #column-memberPrice="{ row }">
+          <span class="price">¥{{ row.memberPrice.toFixed(2) }}</span>
         </template>
 
         <template #column-isOnShelf="{ row }">
@@ -61,7 +65,7 @@
             effect="light"
             size="small"
           >
-            {{ row.isOnShelf ? '是' : '否' }}
+            {{ row.isOnShelf ? '上架' : '下架' }}
           </el-tag>
         </template>
 
@@ -95,10 +99,6 @@
           </el-tag>
         </template>
 
-        <template #column-spec="{ row }">
-          <span>{{ row.spec || '-' }}</span>
-        </template>
-
         <template #column-operation="{ row }">
           <el-button
             type="primary"
@@ -128,7 +128,7 @@
       </CommonTable>
     </div>
 
-    <SelfGoodsDialog
+    <AgentGoodsDialog
       v-model="dialogVisible"
       :mode="dialogMode"
       :record="currentRecord"
@@ -137,7 +137,7 @@
   </div>
 </template>
 
-<script setup lang="ts"> 
+<script setup lang="ts">
 
 import { Download } from '@element-plus/icons-vue'
 import CommonTable from '@/components/CommonTable.vue'
@@ -145,27 +145,29 @@ import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import type { SearchField } from '@/components/SearchBar.vue'
 import CategoryTree from '@/components/CategoryTree.vue'
-import SelfGoodsDialog from './SelfGoodsDialog.vue'
+import AgentGoodsDialog from './AgentGoodsDialog.vue'
 import useListPage from '@/composables/useListPage'
 import {
-  getSelfGoodsPage,
-  deleteSelfGoods,
+  getAgentGoodsPage,
+  deleteAgentGoods,
   brandOptions,
   shelfStatusOptions,
   categoryOptions,
-  type SelfGoods,
-} from '@/mock/goodsSelf'
+  storeOptions,
+  type AgentGoods,
+} from '@/mock/goodsAgent'
 
-const tableData = ref<SelfGoods[]>([])
+const tableData = ref<AgentGoods[]>([])
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit' | 'view'>('add')
-const currentRecord = ref<SelfGoods | null>(null)
+const currentRecord = ref<AgentGoods | null>(null)
 const selectedCategory = ref('')
 
 const searchModel = reactive<Record<string, any>>({
   brand: '',
   shelfStatus: '',
   keyword: '',
+  store: '',
 })
 
 const {
@@ -200,20 +202,26 @@ const searchFields: SearchField[] = [
     type: 'input',
     placeholder: '搜索商品名称',
   },
+  {
+    prop: 'store',
+    label: '所属门店',
+    type: 'select',
+    placeholder: '请选择',
+    options: storeOptions,
+  },
 ]
 
 const columns: TableColumn[] = [
   { prop: 'index', label: '编号', width: 80, align: 'center' },
   { prop: 'productName', label: '商品名称', width: 180 },
   { prop: 'spec', label: '商品规格', width: 120 },
-  { prop: 'productCode', label: '货号', width: 100 },
+  { prop: 'barcode', label: '条形码', width: 140 },
   { prop: 'category', label: '分类', width: 100 },
-  { prop: 'purchasePrice', label: '采购价格', width: 100, align: 'right' },
+  { prop: 'memberPrice', label: '会员价格', width: 100, align: 'right' },
   { prop: 'isOnShelf', label: '上架情况', width: 90, align: 'center' },
   { prop: 'isRecommended', label: '是否推荐', width: 90, align: 'center' },
   { prop: 'isNew', label: '新品', width: 80, align: 'center' },
   { prop: 'isHotSale', label: '是否热卖', width: 90, align: 'center' },
-  { prop: 'sortOrder', label: '排序', width: 80, align: 'center' },
   { prop: 'operation', label: '操作', width: 180, align: 'center', fixed: 'right' },
 ]
 
@@ -226,13 +234,14 @@ const loadData = async () => {
       brand: searchModel.brand || undefined,
       keyword: searchModel.keyword || undefined,
       shelfStatus: searchModel.shelfStatus || undefined,
+      store: searchModel.store || undefined,
       category: selectedCategory.value || undefined,
     }
-    const res = await getSelfGoodsPage(params)
+    const res = await getAgentGoodsPage(params)
     tableData.value = res.data.list
     total.value = res.data.total
   } catch (err) {
-    console.error('加载自采商品列表失败:', err)
+    console.error('加载代理商商品列表失败:', err)
   } finally {
     loading.value = false
   }
@@ -255,6 +264,7 @@ const handleReset = () => {
   searchModel.brand = ''
   searchModel.shelfStatus = ''
   searchModel.keyword = ''
+  searchModel.store = ''
   selectedCategory.value = ''
   currentPage.value = 1
   loadData()
@@ -266,19 +276,19 @@ const handleAdd = () => {
   dialogVisible.value = true
 }
 
-const handleEdit = (row: SelfGoods) => {
+const handleEdit = (row: AgentGoods) => {
   dialogMode.value = 'edit'
   currentRecord.value = row
   dialogVisible.value = true
 }
 
-const handleView = (row: SelfGoods) => {
+const handleView = (row: AgentGoods) => {
   dialogMode.value = 'view'
   currentRecord.value = row
   dialogVisible.value = true
 }
 
-const handleDelete = (row: SelfGoods) => confirmDelete(deleteSelfGoods, row, row.productName)
+const handleDelete = (row: AgentGoods) => confirmDelete(deleteAgentGoods, row, row.productName)
 
 const handleExport = () => {
   ElMessage.success('导出成功')
@@ -288,7 +298,7 @@ onMounted(loadData)
 </script>
 
 <style scoped lang="scss">
-.self-goods-list {
+.agent-goods-list {
   display: flex;
   gap: 16px;
   padding: 16px;

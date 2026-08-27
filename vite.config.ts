@@ -1,13 +1,25 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(() => ({
   plugins: [
     vue(),
+    // 自动引入 Vue 3 组合式 API + Element Plus API
+    AutoImport({
+      imports: ['vue', 'vue-router', 'pinia'],
+      resolvers: [ElementPlusResolver({ importStyle: 'css' })],
+      dts: 'src/auto-imports.d.ts',
+    }),
+    // 自动注册 Vue 组件（含 Element Plus 按需引入）
+    Components({
+      resolvers: [ElementPlusResolver({ importStyle: 'css' })],
+      dts: 'src/components.d.ts',
+    }),
   ],
-  // 部署在 GitHub Pages 时使用 '/ERP/' 作为 base；如需自适应模式可改回：
-  // base: mode === 'production' ? './' : '/ERP/'
   base: '/ERP/',
   resolve: {
     alias: {

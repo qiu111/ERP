@@ -30,9 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElMessageBox, ElMessage } from 'element-plus'
 import { User, UserFilled, ArrowDown, SwitchButton } from '@element-plus/icons-vue'
 import Collapse from './Collapse.vue'
 import Breadcrumb from './Breadcrumb.vue'

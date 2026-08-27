@@ -6,8 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import useMenuStore from '@/store/menu'
 
 const router = useRouter()

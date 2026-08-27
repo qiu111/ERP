@@ -6,8 +6,6 @@
 
 <script setup lang="ts">
 import useMenuStore from '@/store/menu'
-import { computed } from 'vue'
-
 const menuStore = useMenuStore()
 
 const isCollapse = computed(() => {

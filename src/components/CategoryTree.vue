@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { Menu } from '@element-plus/icons-vue'
 
 interface CategoryOption {

@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+
 import { Search } from '@element-plus/icons-vue'
 import { getPurchaseOrderPage, orderStatusMap } from '@/mock/purchaseOrder'
 import type { PurchaseOrder } from '@/mock/purchaseOrder'

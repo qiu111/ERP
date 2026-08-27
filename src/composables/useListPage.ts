@@ -1,6 +1,3 @@
-import { reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-
 export interface ListPagination {
   currentPage: number
   pageSize: number

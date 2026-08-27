@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import type { NavItem } from '@/types'
 
 // 菜单 store：持有侧边栏渲染所需的唯一数据源

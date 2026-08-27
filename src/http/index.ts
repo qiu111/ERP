@@ -1,6 +1,5 @@
 import axios from "axios"
 import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from "axios"
-import { ElMessage } from "element-plus"
 import type { LoginResult, UserInfo } from "@/types"
 
 export interface Result<T = any> {

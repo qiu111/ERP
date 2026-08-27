@@ -117,7 +117,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { Download } from '@element-plus/icons-vue'
 import { usePermission } from '@/composables/usePermission'
 

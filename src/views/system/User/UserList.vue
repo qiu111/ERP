@@ -66,8 +66,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'

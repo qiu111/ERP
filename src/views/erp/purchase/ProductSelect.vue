@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+
 import { Search } from '@element-plus/icons-vue'
 import { productCategories, mockProducts } from '@/mock/purchaseOrder'
 import type { ProductItem } from '@/mock/purchaseOrder'

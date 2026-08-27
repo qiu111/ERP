@@ -216,8 +216,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { ElMessage } from 'element-plus'
 
 export interface ProfitItem {
   id: string

@@ -18,13 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
 import { useTabsStore } from '@/store/tabs/index.ts';
+import type { TabsPaneContext } from 'element-plus'
 import type { Tab } from '@/store/tabs/index.ts';
-import { useRoute, useRouter } from 'vue-router';
-import type { TabsPaneContext } from 'element-plus';
-
-
 const store = useTabsStore();
 const route = useRoute();
 const router = useRouter();

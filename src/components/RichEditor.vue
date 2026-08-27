@@ -77,7 +77,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, computed } from 'vue'
 
 interface Props {
   modelValue: string

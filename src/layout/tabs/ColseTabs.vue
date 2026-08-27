@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
 import { useTabsStore } from '@/store/tabs/index.ts';
 import type { Tab } from '@/store/tabs/index.ts';
 const store = useTabsStore();

@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 
 export type Tab = {
   title: string

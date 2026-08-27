@@ -10,10 +10,8 @@
   </el-menu>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
 import MenuItem from './MenuItem.vue'
 import MenuLogo from './MenuLogo.vue'
-import { useRoute, useRouter } from 'vue-router'
 import useMenuStore from '@/store/menu'
 import type { NavItem } from '@/types'
 

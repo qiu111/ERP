@@ -1,6 +1,4 @@
-import { createApp } from 'vue'
 import router, { loadDynamicRoutes } from './router'
-import { createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import '@/styles/global.scss'

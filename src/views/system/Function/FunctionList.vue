@@ -64,8 +64,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import SearchBar from '@/components/SearchBar.vue'
 import { usePermission } from '@/composables/usePermission'
 import { getFunctionTree, toggleFunctionStatus, deleteFunction } from '@/api/function'

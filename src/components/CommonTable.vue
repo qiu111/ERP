@@ -1,3 +1,4 @@
+import type { TableInstance } from 'element-plus'
 <template>
   <div ref="containerRef" class="common-table">
     <div v-if="$slots.toolbar" class="common-table__toolbar">
@@ -87,9 +88,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import type { TableInstance } from 'element-plus'
-
 export interface TableColumn {
   prop?: string
   label: string

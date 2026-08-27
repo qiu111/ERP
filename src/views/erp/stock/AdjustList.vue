@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+
 import CommonTable from '@/components/CommonTable.vue'
 import type { TableColumn } from '@/components/CommonTable.vue'
 import SearchBar from '@/components/SearchBar.vue'

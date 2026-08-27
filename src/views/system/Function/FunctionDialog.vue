@@ -96,9 +96,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import { addFunction, updateFunction } from '@/api/function'
+import type { FormInstance, FormRules } from 'element-plus'
 import type { FunctionItem } from '@/mock/function'
 
 interface Props {

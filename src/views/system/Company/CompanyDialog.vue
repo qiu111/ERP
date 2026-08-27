@@ -135,9 +135,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import { addCompany, updateCompany } from '@/mock/company'
+import type { FormInstance, FormRules } from 'element-plus'
 import type { CompanyItem } from '@/mock/company'
 
 interface Props {

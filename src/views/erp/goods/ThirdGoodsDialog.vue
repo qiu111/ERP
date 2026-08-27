@@ -7,7 +7,7 @@
     top="5vh"
     @close="handleClose"
   >
-    <div class="self-goods-dialog">
+    <div class="third-goods-dialog">
       <el-form
         ref="formRef"
         :model="formData"
@@ -49,14 +49,6 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="昵称" prop="nickname">
-                <el-input
-                  v-model="formData.nickname"
-                  placeholder="请输入昵称"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
               <el-form-item label="商品品牌" prop="brand">
                 <el-select
                   v-model="formData.brand"
@@ -73,9 +65,6 @@
                 </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="产地" prop="origin">
                 <el-input
@@ -84,12 +73,23 @@
                 />
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="商品货号" prop="productCode">
                 <el-input
                   v-model="formData.productCode"
                   placeholder="请输入商品货号"
                   :disabled="mode === 'edit'"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="条码" prop="barcode">
+                <el-input
+                  v-model="formData.barcode"
+                  placeholder="请输入条码（至少13位）"
                 />
               </el-form-item>
             </el-col>
@@ -130,17 +130,6 @@
 
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="采购价" prop="purchasePrice">
-                <el-input-number
-                  v-model="formData.purchasePrice"
-                  :min="0"
-                  :precision="2"
-                  controls-position="right"
-                  style="width: 100%"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
               <el-form-item label="供应商" prop="supplier">
                 <el-select
                   v-model="formData.supplier"
@@ -156,24 +145,10 @@
                 </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="市场价" prop="marketPrice">
+              <el-form-item label="进货价" prop="purchasePrice">
                 <el-input-number
-                  v-model="formData.marketPrice"
-                  :min="0"
-                  :precision="2"
-                  controls-position="right"
-                  style="width: 100%"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="成本价" prop="costPrice">
-                <el-input-number
-                  v-model="formData.costPrice"
+                  v-model="formData.purchasePrice"
                   :min="0"
                   :precision="2"
                   controls-position="right"
@@ -184,6 +159,17 @@
           </el-row>
 
           <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="配送价" prop="deliveryPrice">
+                <el-input-number
+                  v-model="formData.deliveryPrice"
+                  :min="0"
+                  :precision="2"
+                  controls-position="right"
+                  style="width: 100%"
+                />
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="会员价" prop="memberPrice">
                 <el-input-number
@@ -195,6 +181,34 @@
                 />
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="零售价" prop="retailPrice">
+                <el-input-number
+                  v-model="formData.retailPrice"
+                  :min="0"
+                  :precision="2"
+                  controls-position="right"
+                  style="width: 100%"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="市场价" prop="marketPrice">
+                <el-input-number
+                  v-model="formData.marketPrice"
+                  :min="0"
+                  :precision="2"
+                  controls-position="right"
+                  style="width: 100%"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="兑换积分" prop="exchangePoints">
                 <el-input-number
@@ -206,55 +220,15 @@
                 />
               </el-form-item>
             </el-col>
-          </el-row>
-        </div>
-
-        <!-- 出口业务必填 -->
-        <div class="form-section">
-          <div class="form-section__title form-section__title--required">
-            出口业务必填
-          </div>
-          <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="报关英文名" prop="customsEnglishName">
-                <el-input
-                  v-model="formData.customsEnglishName"
-                  placeholder="请输入报关英文名"
+              <el-form-item label="库存数量" prop="stockQuantity">
+                <el-input-number
+                  v-model="formData.stockQuantity"
+                  :min="0"
+                  :precision="0"
+                  controls-position="right"
+                  style="width: 100%"
                 />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="货源地" prop="sourcePlace">
-                <el-input
-                  v-model="formData.sourcePlace"
-                  placeholder="请输入货源地"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="出口HS编码" prop="hsCode">
-                <el-input
-                  v-model="formData.hsCode"
-                  placeholder="请输入出口HS编码"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="出口退税率" prop="exportRebateRate">
-                <div class="rebate-input">
-                  <el-input-number
-                    v-model="formData.exportRebateRate"
-                    :min="0"
-                    :max="100"
-                    :precision="0"
-                    controls-position="right"
-                    style="width: calc(100% - 30px)"
-                  />
-                  <span class="rebate-unit">%</span>
-                </div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -311,6 +285,17 @@
 
           <el-row :gutter="20">
             <el-col :span="24">
+              <el-form-item label="商品原始链接" prop="originalLink">
+                <el-input
+                  v-model="formData.originalLink"
+                  placeholder="请输入商品原始链接"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
+            <el-col :span="24">
               <el-form-item label="商品简介" prop="description">
                 <el-input
                   v-model="formData.description"
@@ -358,20 +343,20 @@
 
 import type { FormInstance, FormRules } from 'element-plus'
 import {
-  addSelfGoods,
-  updateSelfGoods,
+  addThirdGoods,
+  updateThirdGoods,
   brandOptions,
   categoryOptions,
   supplierOptions,
   unitOptions,
-  type SelfGoods,
-} from '@/mock/goodsSelf'
+  type ThirdGoods,
+} from '@/mock/goodsThird'
 import RichEditor from '@/components/RichEditor.vue'
 
 interface Props {
   modelValue: boolean
   mode: 'add' | 'edit' | 'view'
-  record?: SelfGoods | null
+  record?: ThirdGoods | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -393,24 +378,21 @@ const submitting = ref(false)
 
 interface FormData {
   productCode: string
+  barcode: string
   productName: string
-  nickname: string
   brand: string
   origin: string
   category: string
-  spec: string
   unit: string
   weight: number
-  purchasePrice: number
   supplier: string
-  marketPrice: number
-  costPrice: number
+  purchasePrice: number
+  deliveryPrice: number
   memberPrice: number
+  retailPrice: number
+  marketPrice: number
   exchangePoints: number
-  customsEnglishName: string
-  sourcePlace: string
-  hsCode: string
-  exportRebateRate: number
+  stockQuantity: number
   isFreeShipping: boolean
   isOnShelf: boolean
   isRecommended: boolean
@@ -418,31 +400,28 @@ interface FormData {
   isHotSale: boolean
   isPointsParticipation: boolean
   keywords: string
+  originalLink: string
   description: string
   detailDescription: string
-  sortOrder: number
 }
 
 const defaultFormData = (): FormData => ({
   productCode: '',
+  barcode: '',
   productName: '',
-  nickname: '',
   brand: '',
   origin: '',
   category: '',
-  spec: '默认规格:默认',
   unit: '个',
   weight: 0,
-  purchasePrice: 0,
   supplier: '',
-  marketPrice: 0,
-  costPrice: 0,
+  purchasePrice: 0,
+  deliveryPrice: 0,
   memberPrice: 0,
+  retailPrice: 0,
+  marketPrice: 0,
   exchangePoints: 0,
-  customsEnglishName: '',
-  sourcePlace: '',
-  hsCode: '',
-  exportRebateRate: 0,
+  stockQuantity: 0,
   isFreeShipping: false,
   isOnShelf: true,
   isRecommended: false,
@@ -450,31 +429,50 @@ const defaultFormData = (): FormData => ({
   isHotSale: false,
   isPointsParticipation: false,
   keywords: '',
+  originalLink: '',
   description: '',
   detailDescription: '',
-  sortOrder: 5,
 })
 
 const formData = ref<FormData>(defaultFormData())
+
+// 自定义条码校验器：至少13位
+const validateBarcode = (_rule: any, value: string, callback: any) => {
+  if (!value) {
+    callback(new Error('请输入条码'))
+  } else if (value.length < 13) {
+    callback(new Error('条码至少13位'))
+  } else {
+    callback()
+  }
+}
 
 const formRules: FormRules<FormData> = {
   category: [{ required: true, message: '请选择商品分类', trigger: 'change' }],
   productName: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
   productCode: [{ required: true, message: '请输入商品货号', trigger: 'blur' }],
+  barcode: [
+    { required: true, message: '请输入条码', trigger: 'blur' },
+    { validator: validateBarcode, trigger: 'blur' },
+  ],
   unit: [{ required: true, message: '请选择单位', trigger: 'change' }],
-  purchasePrice: [{ required: true, message: '请输入采购价', trigger: 'blur' }],
   supplier: [{ required: true, message: '请选择供应商', trigger: 'change' }],
-  sourcePlace: [{ required: true, message: '请输入货源地', trigger: 'blur' }],
+  purchasePrice: [{ required: true, message: '请输入进货价', trigger: 'blur' }],
+  deliveryPrice: [{ required: true, message: '请输入配送价', trigger: 'blur' }],
+  memberPrice: [{ required: true, message: '请输入会员价', trigger: 'blur' }],
+  retailPrice: [{ required: true, message: '请输入零售价', trigger: 'blur' }],
+  marketPrice: [{ required: true, message: '请输入市场价', trigger: 'blur' }],
+  stockQuantity: [{ required: true, message: '请输入库存数量', trigger: 'blur' }],
   detailDescription: [{ required: true, message: '请输入商品详情描述', trigger: 'blur' }],
 }
 
 const dialogTitle = computed(() => {
   const titles: Record<string, string> = {
-    add: '新增商品',
-    edit: '修改商品',
-    view: '查看商品',
+    add: '新增第三方商品',
+    edit: '修改第三方商品',
+    view: '查看第三方商品',
   }
-  return titles[props.mode] || '商品'
+  return titles[props.mode] || '第三方商品'
 })
 
 watch(
@@ -485,24 +483,21 @@ watch(
         const r = props.record
         formData.value = {
           productCode: r.productCode,
+          barcode: r.barcode || '',
           productName: r.productName,
-          nickname: r.nickname || '',
           brand: r.brand || '',
           origin: r.origin || '',
           category: r.category,
-          spec: r.spec || '默认规格:默认',
           unit: r.unit || '个',
           weight: r.weight || 0,
-          purchasePrice: r.purchasePrice || 0,
           supplier: r.supplier || '',
-          marketPrice: r.marketPrice || 0,
-          costPrice: r.costPrice || 0,
+          purchasePrice: r.purchasePrice || 0,
+          deliveryPrice: r.deliveryPrice || 0,
           memberPrice: r.memberPrice || 0,
+          retailPrice: r.retailPrice || 0,
+          marketPrice: r.marketPrice || 0,
           exchangePoints: r.exchangePoints || 0,
-          customsEnglishName: r.customsEnglishName || '',
-          sourcePlace: r.sourcePlace || '',
-          hsCode: r.hsCode || '',
-          exportRebateRate: r.exportRebateRate || 0,
+          stockQuantity: r.stockQuantity || 0,
           isFreeShipping: r.isFreeShipping || false,
           isOnShelf: r.isOnShelf ?? true,
           isRecommended: r.isRecommended || false,
@@ -510,9 +505,9 @@ watch(
           isHotSale: r.isHotSale || false,
           isPointsParticipation: r.isPointsParticipation || false,
           keywords: r.keywords || '',
+          originalLink: r.originalLink || '',
           description: r.description || '',
           detailDescription: r.detailDescription || '',
-          sortOrder: r.sortOrder || 5,
         }
       } else {
         formData.value = {
@@ -539,9 +534,9 @@ const handleSubmit = async () => {
         ...formData.value,
       }
       if (props.mode === 'add') {
-        await addSelfGoods(payload)
+        await addThirdGoods(payload as Omit<ThirdGoods, 'id' | 'createTime' | 'updateTime'>)
       } else if (props.record) {
-        await updateSelfGoods(props.record.id, payload)
+        await updateThirdGoods(props.record.id, payload as Partial<ThirdGoods>)
       }
       ElMessage.success('保存成功')
       emit('success')
@@ -556,7 +551,7 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped lang="scss">
-.self-goods-dialog {
+.third-goods-dialog {
   max-height: 70vh;
   overflow-y: auto;
   padding-right: 10px;
@@ -607,18 +602,6 @@ const handleSubmit = async () => {
 }
 
 .weight-unit {
-  color: #909399;
-  font-size: 14px;
-}
-
-.rebate-input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.rebate-unit {
   color: #909399;
   font-size: 14px;
 }

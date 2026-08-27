@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import { Close } from '@element-plus/icons-vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/tabs/index.ts'
 import type { Tab } from '@/store/tabs/index.ts'
 

@@ -61,13 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user/user.ts'
 import { getLogin } from '@/api/user'
 import { loadDynamicRoutes } from '@/router' // 导入动态路由加载方法
-import { ElMessage } from 'element-plus'
-
 const router = useRouter()
 const userStore = useUserStore()
 

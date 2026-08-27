@@ -62,9 +62,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import { addUser, updateUser, mockRoleList } from '@/mock/userAdmin'
+import type { FormInstance, FormRules } from 'element-plus'
 import type { UserItem } from '@/mock/userAdmin'
 
 interface Props {
