@@ -98,6 +98,8 @@ export interface TableColumn {
   sortable?: boolean
   showOverflowTooltip?: boolean
   key?: string
+  /** 使用 #column-{prop} 具名插槽自定义单元格内容 */
+  slot?: boolean
 }
 
 interface Props {
@@ -218,11 +220,25 @@ const isTreeData = computed(() => {
   return props.data.some((item) => item.children && item.children.length)
 })
 
+/**
+ * 是否为外部（服务端）分页模式：
+ * - 当 props.total 显式 > 0：表示外部已自行做分页，props.data 就是当前页 slice 后的数据集
+ *   → 禁止在内部再做一次 slice（否则点第 2 页会把原本正确的一页数据再切到空）
+ * - 当 props.total 未提供（默认 0）：表示 props.data 提供的是全量数据
+ *   → 内部按 innerCurrentPage/innerPageSize 自行 slice（客户端分页模式）
+ */
+const serverSidePagination = computed(() => props.total > 0)
+
 // If pagination is handled internally (flat data), slice the data
 const pagedData = computed(() => {
   if (!props.pagination || isTreeData.value) {
     return props.data
   }
+  // 服务端分页：外部（ApprovalTodoList / 各列表页）已按当前页取回对应 slice 的一页数据，直接用
+  if (serverSidePagination.value) {
+    return props.data
+  }
+  // 客户端分页：全量数据 props.data，内部根据 currentPage / pageSize 切片
   const start = (innerCurrentPage.value - 1) * innerPageSize.value
   return props.data.slice(start, start + innerPageSize.value)
 })

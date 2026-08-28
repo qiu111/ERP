@@ -60,6 +60,22 @@
           </el-form-item>
 
           <el-form-item
+            v-else-if="field.type === 'timerange'"
+            :label="field.label"
+            :prop="field.prop"
+          >
+            <el-time-picker
+              v-model="innerModel[field.prop]"
+              is-range
+              value-format="HH:mm"
+              :start-placeholder="field.startPlaceholder || '开始时间'"
+              :end-placeholder="field.endPlaceholder || '结束时间'"
+              style="width: 220px"
+              @change="handleFieldChange"
+            />
+          </el-form-item>
+
+          <el-form-item
             v-else-if="field.type === 'checkbox'"
             :label="field.label"
             :prop="field.prop"
@@ -123,7 +139,7 @@ import { usePermission } from '@/composables/usePermission'
 export interface SearchField {
   prop: string
   label: string
-  type: 'input' | 'select' | 'date' | 'daterange' | 'checkbox'
+  type: 'input' | 'select' | 'date' | 'daterange' | 'timerange' | 'checkbox'
   placeholder?: string
   startPlaceholder?: string
   endPlaceholder?: string

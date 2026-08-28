@@ -91,19 +91,13 @@
       </el-form-item>
 
       <el-form-item label="分类图片" prop="image">
-        <div class="image-upload-wrapper">
-          <el-upload
-            class="image-uploader"
-            action="#"
-            :auto-upload="false"
-            :show-file-list="false"
-            :on-change="handleImageChange"
-            accept="image/*"
-          >
-            <el-button type="primary">点击选择文件</el-button>
-          </el-upload>
-          <span class="image-tip">图片最佳大小(120*60)</span>
-        </div>
+        <FileUpload
+          accept="image/*"
+          accept-images-only
+          button-text="点击选择文件"
+          tip="图片最佳大小(120*60)"
+          @change="handleImageSelected"
+        />
       </el-form-item>
 
       <el-form-item label="显示排序" prop="sort">
@@ -158,6 +152,7 @@
 
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
+import FileUpload from '@/components/FileUpload.vue'
 import {
   addCategory,
   updateCategory,
@@ -313,10 +308,11 @@ const handleParentChange = (value: string | null) => {
   formData.value.parentId = value
 }
 
-// 处理图片选择
-const handleImageChange = (file: any) => {
-  if (file.raw) {
-    formData.value.image = file.name
+// 处理图片选择（Mock：仅记录文件名）
+const handleImageSelected = (file: unknown) => {
+  const f = file as { name?: string } | null
+  if (f && f.name) {
+    formData.value.image = f.name
   }
 }
 
@@ -413,17 +409,6 @@ const handleSubmit = async () => {
 .parent-select-wrapper {
   display: flex;
   width: 100%;
-}
-
-.image-upload-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.image-tip {
-  font-size: 12px;
-  color: #f56c6c;
 }
 
 .commission-wrapper {

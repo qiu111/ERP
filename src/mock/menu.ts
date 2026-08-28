@@ -46,8 +46,6 @@ export const mockMenuList: BackendFunction[] = [
   item({ id: '2001', pid: '200', text: '日志管理', function_code: 'oa_log', url: '/oa/log', function_icon: 'Document', group_code: 'oa' }),
   item({ id: '20011', pid: '2001', text: '工作日志', function_code: 'oa_log_work', url: '/oa/log/work', function_icon: 'Edit', group_code: 'oa' }),
   item({ id: '20012', pid: '2001', text: '日志审核', function_code: 'oa_log_audit', url: '/oa/log/audit', function_icon: 'View', group_code: 'oa' }),
-  // 每日工作审核
-  item({ id: '2002', pid: '200', text: '每日工作审核', function_code: 'oa_daily_audit', url: '/oa/daily-audit', function_icon: 'Calendar', group_code: 'oa' }),
   // 工作计划管理
   item({ id: '2003', pid: '200', text: '工作计划管理', function_code: 'oa_plan', url: '/oa/plan', function_icon: 'Calendar', group_code: 'oa' }),
   item({ id: '20031', pid: '2003', text: '我的工作计划', function_code: 'oa_plan_mine', url: '/oa/plan/mine', function_icon: 'User', group_code: 'oa' }),
